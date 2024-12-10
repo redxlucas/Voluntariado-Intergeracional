@@ -11,18 +11,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-// Colocar annotation para driblar erro de CORS
+@CrossOrigin(origins = "*")
 public class IdosoController {
 
     @Autowired
     public IdosoService idosoService;
 
     @PostMapping("/idoso")
-    public ResponseEntity<Idoso> add(Idoso idoso) {
+    public ResponseEntity<Idoso> add(@RequestBody Idoso idoso) {
         Idoso novoIdoso = idosoService.adicionar(idoso);
         return ResponseEntity.status(201).body(novoIdoso);
     }
