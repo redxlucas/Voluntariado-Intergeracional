@@ -29,7 +29,7 @@ public class AreasDeInteresse {
   private Voluntarios voluntarios;
   @ManyToOne
   @JoinColumn(name = "idoso_id")
-  private Idosos idosos;
+  private Idoso idosos;
   @OneToMany(mappedBy = "areasDeInteresse")
   private List<Atividades> atividadesList = new ArrayList<>();
 

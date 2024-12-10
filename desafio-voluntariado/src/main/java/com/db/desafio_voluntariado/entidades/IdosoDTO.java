@@ -1,19 +1,18 @@
 package com.db.desafio_voluntariado.entidades;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-
 @Data
-@Entity
+@AllArgsConstructor
 public class IdosoDTO {
-  @Id
-  private String id;
+  @Column(nullable = false)
+  private Integer id;
   @Column(nullable = false)
   private String nomeCompleto;
   @Column(nullable = false)
   private String telefone;
+  @Column(nullable = false)
+  private String email;
 }
-

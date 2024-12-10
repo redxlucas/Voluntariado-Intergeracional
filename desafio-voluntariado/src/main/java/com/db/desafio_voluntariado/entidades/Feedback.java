@@ -19,5 +19,5 @@ public class Feedback {
   private String nota;
   @ManyToOne
   @JoinColumn(name = "idoso_id")
-  private Idosos idosos;
+  private Idoso idosos;
 }

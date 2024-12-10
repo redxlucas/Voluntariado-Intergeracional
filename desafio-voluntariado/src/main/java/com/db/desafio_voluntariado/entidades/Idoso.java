@@ -5,18 +5,18 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 
 @Data
 @Entity
-public class Idosos {
+public class Idoso {
   @Id
-  private String id;
+  @GeneratedValue
+  private Integer id;
   @Column(nullable = false)
   private String nomeCompleto;
   private String endereco;
@@ -32,12 +32,9 @@ public class Idosos {
   private String nomeResponsavel;
   @Column(nullable = false)
   private String telefoneResponsavel;
-  @OneToOne
-  @JoinColumn(name = "idoso_dto")
-  private IdosoDTO idosoDto;
+
   @OneToMany(mappedBy = "idosos")
   private List<AreasDeInteresse> areasDeInteresseList = new ArrayList<>();
   @OneToMany(mappedBy = "idosos")
   private List<Feedback> feedbackList = new ArrayList<>();
-
 }
