@@ -16,7 +16,7 @@ public class Voluntarios {
     
   @Id
   @GeneratedValue
-  private String id;
+  private Integer id;
   @Column(nullable = false)
   private String nomeCompleto;
   @Column(nullable = false)
@@ -27,6 +27,11 @@ public class Voluntarios {
   private String cpf;
   @Column(nullable = false)
   private String telefone;
+  @Column(nullable = false)
+  private String email;
+  @Column(nullable = false)
+  private String senha;
+
   @OneToMany(mappedBy = "voluntarios")
   private List<AreasDeInteresse> areasDeInteresseList = new ArrayList<>();
 }
