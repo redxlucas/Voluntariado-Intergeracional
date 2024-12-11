@@ -11,6 +11,7 @@ import com.db.desafio_voluntariado.entities.Voluntario;
 import com.db.desafio_voluntariado.services.VoluntariosService;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,22 +24,28 @@ public class VoluntarioController {
     public VoluntariosService voluntariosService;
 
     @PostMapping("/voluntario")
-    public ResponseEntity<Voluntario> add (Voluntario voluntarios){
+    public ResponseEntity<Voluntario> add (@RequestBody Voluntario voluntario){
 
-        Voluntario novoVoluntario = voluntariosService.addVoluntarios(voluntarios);
+        Voluntario novoVoluntario = voluntariosService.addVoluntarios(voluntario);
         return ResponseEntity.status(201).body(novoVoluntario);
     }
 
-    @GetMapping("/volunario/{id}")
+    @GetMapping("/voluntario/{id}")
     public ResponseEntity<UsuarioDTO> getOneVoluntarioById(@PathVariable Integer id) {
-        UsuarioDTO voluntariosDTO = voluntariosService.getOne(id);
-        return ResponseEntity.ok(voluntariosDTO);
+        UsuarioDTO voluntarioDTO = voluntariosService.getOne(id);
+        return ResponseEntity.ok(voluntarioDTO);
+    }
+
+    @GetMapping("/voluntario/interesse/{id}")
+    public ResponseEntity<UsuarioDTO> getAreaDeInteresse(@PathVariable Integer id) {
+        UsuarioDTO voluntarioDTO = voluntariosService.getOne(id);
+        return ResponseEntity.ok(voluntarioDTO);
     }
     
     @GetMapping("/voluntario/todos")
     public ResponseEntity<List<UsuarioDTO>> getAllVoluntarioById() {
-        List<UsuarioDTO> voluntariosDTOList = voluntariosService.getAll();
-        return ResponseEntity.ok(voluntariosDTOList);
+        List<UsuarioDTO> voluntarioDTOList = voluntariosService.getAll();
+        return ResponseEntity.ok(voluntarioDTOList);
     }
 
 }
