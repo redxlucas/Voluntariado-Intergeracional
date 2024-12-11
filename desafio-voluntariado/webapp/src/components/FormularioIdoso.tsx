@@ -4,7 +4,11 @@ import axios from 'axios';
 // Interface para definir a estrutura dos dados que serão enviados
 interface Idoso {
   nomeCompleto: string;
-  endereco: string;
+  dataDeNascimento: string;
+  cep: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
   email: string;
   senha: string;
   cpf: string;
@@ -13,23 +17,24 @@ interface Idoso {
   telefoneResponsavel: string;
 }
 
-const Formulario: React.FC = () => {
-  // Estado para armazenar os dados do formulário
+const FormularioIdoso: React.FC = () => {
   const [formData, setFormData] = useState<Idoso>({
-    nomeCompleto: '',
-    endereco: '',
-    email: '',
-    senha: '',
-    cpf: '',
-    telefone: '',
-    nomeResponsavel: '',
-    telefoneResponsavel: '',
+    nomeCompleto: "",
+    dataDeNascimento: "",
+    cep: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
+    email: "",
+    senha: "",
+    cpf: "",
+    telefone: "",
+    nomeResponsavel: "",
+    telefoneResponsavel: ""
   });
 
-  // Estado para armazenar a resposta do backend (dados do idoso)
   const [responseData, setResponseData] = useState<any>(null);
 
-  // Função para lidar com a mudança dos valores dos inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -38,15 +43,54 @@ const Formulario: React.FC = () => {
     }));
   };
 
+  const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cep = e.target.value;
+    setFormData((prevState) => ({
+      ...prevState,
+      cep: cep,
+    }));
+
+    if (cep.length === 8) {
+      try {
+        const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+        if (!response.data.erro) {
+          setFormData((prevState) => ({
+            ...prevState,
+            bairro: response.data.bairro,
+            cidade: response.data.localidade,
+            estado: response.data.uf,
+          }));
+        } else {
+          alert('CEP não encontrado!');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do CEP:', error);
+      }
+    }
+  };
+
+  const formatDate = (date: string) => {
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const formattedDataDeNascimento = formatDate(formData.dataDeNascimento);
+
+    const dataToSend = {
+      ...formData,
+      dataDeNascimento: formattedDataDeNascimento,
+    };
+
     axios
-      .post('http://localhost:8080/idoso', formData)
+      .post('http://localhost:8080/idoso', dataToSend)
       .then((response) => {
         console.log('Idoso criado com sucesso:', response.data);
         const idosoId = response.data.id;
 
+        // Busca os dados do idoso
         axios
           .get(`http://localhost:8080/idoso/${idosoId}`)
           .then((response) => {
@@ -57,15 +101,20 @@ const Formulario: React.FC = () => {
             console.error('Erro ao buscar dados do idoso:', error);
           });
 
+        // Limpa os campos após envio
         setFormData({
-          nomeCompleto: '',
-          endereco: '',
-          email: '',
-          senha: '',
-          cpf: '',
-          telefone: '',
-          nomeResponsavel: '',
-          telefoneResponsavel: '',
+          nomeCompleto: "",
+          dataDeNascimento: "",
+          cep: "",
+          bairro: "",
+          cidade: "",
+          estado: "",
+          email: "",
+          senha: "",
+          cpf: "",
+          telefone: "",
+          nomeResponsavel: "",
+          telefoneResponsavel: "",
         });
       })
       .catch((error) => {
@@ -89,13 +138,48 @@ const Formulario: React.FC = () => {
           />
         </div>
         <div>
-          <label>Endereço:</label>
+          <label>Data de Nascimento:</label>
+          <input
+            type="date"
+            name="dataDeNascimento"
+            value={formData.dataDeNascimento}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>CEP:</label>
           <input
             type="text"
-            name="endereco"
-            value={formData.endereco}
+            name="cep"
+            value={formData.cep}
+            onChange={handleCepChange} // Alterado para usar handleCepChange
+          />
+        </div>
+        <div>
+          <label>Bairro:</label>
+          <input
+            type="text"
+            name="bairro"
+            value={formData.bairro}
             onChange={handleChange}
-            placeholder="Endereço"
+          />
+        </div>
+        <div>
+          <label>Cidade:</label>
+          <input
+            type="text"
+            name="cidade"
+            value={formData.cidade}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Estado:</label>
+          <input
+            type="text"
+            name="estado"
+            value={formData.estado}
+            onChange={handleChange}
           />
         </div>
         <div>
@@ -178,4 +262,4 @@ const Formulario: React.FC = () => {
   );
 };
 
-export default Formulario;
+export default FormularioIdoso;

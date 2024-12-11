@@ -16,9 +16,11 @@ public class UsuarioDTO {
     private String nomeCompleto;
 
     @Column(nullable = false)
+    private Integer idade;
+
+    @Column(nullable = false)
     private String telefone;
 
     @Column(nullable = false)
     private String email;
-
 }

@@ -16,33 +16,33 @@ import com.db.desafio_voluntariado.repository.VoluntarioRepository;
 public class VoluntariosService {
 
     @Autowired
-    public VoluntarioRepository voluntariosRepository;
+    public VoluntarioRepository voluntarioRepository;
 
-    public Voluntario addVoluntarios(Voluntario voluntarios) {
-        return voluntariosRepository.save(voluntarios);
+    public Voluntario addVoluntario(Voluntario voluntario) {
+        return voluntarioRepository.save(voluntario);
     }
 
     public UsuarioDTO getOne(Integer id) {
-        Optional<Voluntario> voluOptional = voluntariosRepository.findById(id);
+        Optional<Voluntario> voluntarioOptional = voluntarioRepository.findById(id);
 
-        if (voluOptional.isPresent()) {
-            Voluntario voluntarios = voluOptional.get();
-            return new UsuarioDTO(voluntarios.getId(), voluntarios.getNomeCompleto(), voluntarios.getTelefone(),
-                    voluntarios.getEmail());
+        if (voluntarioOptional.isPresent()) {
+            Voluntario voluntario = voluntarioOptional.get();
+            return new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(),  voluntario.getTelefone(),
+                    voluntario.getEmail());
         } else {
             throw new NotFoundException("Voluntário não encontrado.");
         }
     }
 
     public List<UsuarioDTO> getAll() {
-        List<Voluntario> voluntariosList = (List<Voluntario>) voluntariosRepository.findAll();
+        List<Voluntario> voluntarioList = (List<Voluntario>) voluntarioRepository.findAll();
         
-        if (voluntariosList.isEmpty()) {
+        if (voluntarioList.isEmpty()) {
             throw new NotFoundException("Voluntários não encontrados");
         }
 
-        return voluntariosList.stream()
-                .map(voluntario -> new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(),voluntario.getTelefone(), voluntario.getEmail()))
+        return voluntarioList.stream()
+                .map(voluntario -> new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(), voluntario.getTelefone(), voluntario.getEmail()))
                 .collect(Collectors.toList());
     }
 }

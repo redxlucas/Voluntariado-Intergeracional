@@ -4,8 +4,11 @@ import axios from 'axios';
 // Interface to define the structure of volunteer data
 interface Voluntario {
   nomeCompleto: string;
-  idade: number;
-  endereco: string;
+  dataDeNascimento: string;
+  cep: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
   email: string;
   senha: string;
   cpf: string;
@@ -15,17 +18,19 @@ interface Voluntario {
 }
 
 const FormularioVoluntario: React.FC = () => {
-  // State to store form data
   const [formData, setFormData] = useState<Voluntario>({
-    nomeCompleto: '',
-    idade: 0,
-    endereco: '',
-    email: '',
-    senha: '',
-    cpf: '',
-    telefone: '',
+    nomeCompleto: "",
+    dataDeNascimento: "",
+    cep: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
+    email: "",
+    senha: "",
+    cpf: "",
+    telefone: "",
     areasInteresse: [],
-    disponibilidade: '',
+    disponibilidade: "",
   });
 
   // State to store backend response
@@ -51,12 +56,48 @@ const FormularioVoluntario: React.FC = () => {
     }));
   };
 
-  // Handle form submission
+  const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cep = e.target.value;
+    setFormData((prevState) => ({
+      ...prevState,
+      cep: cep,
+    }));
+
+    if (cep.length === 8) {
+      try {
+        const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+        if (!response.data.erro) {
+          setFormData((prevState) => ({
+            ...prevState,
+            bairro: response.data.bairro,
+            cidade: response.data.localidade,
+            estado: response.data.uf,
+          }));
+        } else {
+          alert('CEP não encontrado!');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do CEP:', error);
+      }
+    }
+  };
+
+  const formatDate = (date: string) => {
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const formattedDataDeNascimento = formatDate(formData.dataDeNascimento);
+
+    const dataToSend = {
+      ...formData,
+      dataDeNascimento: formattedDataDeNascimento,
+    };
+
     axios
-      .post('http://localhost:8080/voluntario', formData)
+      .post('http://localhost:8080/voluntario', dataToSend)
       .then((response) => {
         console.log('Voluntário criado com sucesso:', response.data);
         const voluntarioId = response.data.id;
@@ -73,15 +114,18 @@ const FormularioVoluntario: React.FC = () => {
 
         // Reset form after submission
         setFormData({
-          nomeCompleto: '',
-          idade: 0,
-          endereco: '',
-          email: '',
-          senha: '',
-          cpf: '',
-          telefone: '',
+          nomeCompleto: "",
+          dataDeNascimento: "",
+          cep: "",
+          bairro: "",
+          cidade: "",
+          estado: "",
+          email: "",
+          senha: "",
+          cpf: "",
+          telefone: "",
           areasInteresse: [],
-          disponibilidade: '',
+          disponibilidade: "",
         });
       })
       .catch((error) => {
@@ -105,23 +149,48 @@ const FormularioVoluntario: React.FC = () => {
           />
         </div>
         <div>
-          <label>Idade:</label>
+          <label>Data de Nascimento:</label>
           <input
-            type="number"
-            name="idade"
-            value={formData.idade}
+            type="date"
+            name="dataDeNascimento"
+            value={formData.dataDeNascimento}
             onChange={handleChange}
-            placeholder="Idade"
           />
         </div>
         <div>
-          <label>Endereço:</label>
+          <label>CEP:</label>
           <input
             type="text"
-            name="endereco"
-            value={formData.endereco}
+            name="cep"
+            value={formData.cep}
+            onChange={handleCepChange} // Alterado para usar handleCepChange
+          />
+        </div>
+        <div>
+          <label>Bairro:</label>
+          <input
+            type="text"
+            name="bairro"
+            value={formData.bairro}
             onChange={handleChange}
-            placeholder="Endereço"
+          />
+        </div>
+        <div>
+          <label>Cidade:</label>
+          <input
+            type="text"
+            name="cidade"
+            value={formData.cidade}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Estado:</label>
+          <input
+            type="text"
+            name="estado"
+            value={formData.estado}
+            onChange={handleChange}
           />
         </div>
         <div>
@@ -200,7 +269,7 @@ const FormularioVoluntario: React.FC = () => {
             </label>
           </div>
         </div>
-        {/* <div>
+        <div>
           <label>Disponibilidade:</label>
           <select
             name="disponibilidade"
@@ -214,7 +283,7 @@ const FormularioVoluntario: React.FC = () => {
             <option value="Noite">Noite</option>
             <option value="Fins de Semana">Fins de Semana</option>
           </select>
-        </div> */}
+        </div>
         <button type="submit">Enviar</button>
       </form>
 

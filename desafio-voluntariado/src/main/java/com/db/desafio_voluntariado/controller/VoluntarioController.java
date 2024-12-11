@@ -26,7 +26,7 @@ public class VoluntarioController {
     @PostMapping("/voluntario")
     public ResponseEntity<Voluntario> add (@RequestBody Voluntario voluntario){
 
-        Voluntario novoVoluntario = voluntariosService.addVoluntarios(voluntario);
+        Voluntario novoVoluntario = voluntariosService.addVoluntario(voluntario);
         return ResponseEntity.status(201).body(novoVoluntario);
     }
 

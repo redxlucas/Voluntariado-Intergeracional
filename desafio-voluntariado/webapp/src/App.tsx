@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-import Formulario from './components/FormularioIdoso';
+import FormularioIdoso from './components/FormularioIdoso';
 
 // New Volunteer Form Component
 import FormularioVoluntario from './components/FormularioVoluntario';
@@ -22,7 +22,7 @@ const App: React.FC = () => {
         </nav>
 
         <Routes>
-          <Route path="/idoso" element={<Formulario />} />
+          <Route path="/idoso" element={<FormularioIdoso />} />
           <Route path="/voluntario" element={<FormularioVoluntario />} />
           <Route path="/" element={<div>Selecione um tipo de cadastro</div>} />
         </Routes>

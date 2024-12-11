@@ -27,7 +27,7 @@ public class IdosoService {
 
         if (idosoOptional.isPresent()) {
             Idoso idoso = idosoOptional.get();
-            return new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getTelefone(), idoso.getEmail());
+            return new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getIdade(), idoso.getTelefone(), idoso.getEmail());
         } else {
             throw new NotFoundException("Idoso não encontrado.");
         }
@@ -39,7 +39,7 @@ public class IdosoService {
             throw new NotFoundException("Idoso(s) não encontrado(s)");
         }
         return idosoList.stream().map(
-                idoso -> new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getTelefone(), idoso.getEmail()))
+                idoso -> new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getIdade(), idoso.getTelefone(), idoso.getEmail()))
                 .collect(Collectors.toList());
     }
 }
