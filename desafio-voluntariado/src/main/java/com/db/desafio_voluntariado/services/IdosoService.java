@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.db.desafio_voluntariado.entidades.Idoso;
-import com.db.desafio_voluntariado.entidades.IdosoDTO;
+import com.db.desafio_voluntariado.entities.Idoso;
+import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.exception.NotFoundException;
 import com.db.desafio_voluntariado.repository.IdosoRepository;
 
@@ -22,22 +22,24 @@ public class IdosoService {
         return idosoRepository.save(idoso);
     }
 
-    public IdosoDTO getOne(Integer id) {
+    public UsuarioDTO getOne(Integer id) {
         Optional<Idoso> idosoOptional = idosoRepository.findById(id);
 
         if (idosoOptional.isPresent()) {
             Idoso idoso = idosoOptional.get();
-            return new IdosoDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getTelefone(), idoso.getEmail());
+            return new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getTelefone(), idoso.getEmail());
         } else {
             throw new NotFoundException("Idoso não encontrado.");
         }
     }
 
-    public List<IdosoDTO> getAll() {
+    public List<UsuarioDTO> getAll() {
         List<Idoso> idosoList = (List<Idoso>) idosoRepository.findAll();
-        if(idosoList.isEmpty()) {
+        if (idosoList.isEmpty()) {
             throw new NotFoundException("Idoso(s) não encontrado(s)");
         }
-        return idosoList.stream().map(idoso -> new IdosoDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getTelefone(), idoso.getEmail())).collect(Collectors.toList());
+        return idosoList.stream().map(
+                idoso -> new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getTelefone(), idoso.getEmail()))
+                .collect(Collectors.toList());
     }
 }

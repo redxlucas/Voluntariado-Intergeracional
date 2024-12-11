@@ -1,4 +1,4 @@
-package com.db.desafio_voluntariado.entidades;
+package com.db.desafio_voluntariado.entities;
 
 
 import jakarta.persistence.Column;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class VoluntariosDTO {
+public class UsuarioDTO {
 
     @Column(nullable = false)
     private Integer id;

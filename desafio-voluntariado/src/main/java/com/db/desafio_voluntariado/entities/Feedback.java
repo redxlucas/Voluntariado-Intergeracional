@@ -1,4 +1,4 @@
-package com.db.desafio_voluntariado.entidades;
+package com.db.desafio_voluntariado.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

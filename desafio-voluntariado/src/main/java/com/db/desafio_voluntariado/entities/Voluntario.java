@@ -1,4 +1,4 @@
-package com.db.desafio_voluntariado.entidades;
+package com.db.desafio_voluntariado.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Voluntarios {
+public class Voluntario {
     
   @Id
   @GeneratedValue

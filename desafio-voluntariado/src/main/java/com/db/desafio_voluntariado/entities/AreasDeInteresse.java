@@ -1,4 +1,4 @@
-package com.db.desafio_voluntariado.entidades;
+package com.db.desafio_voluntariado.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class AreasDeInteresse {
   private String descricao;
   @ManyToOne
   @JoinColumn(name = "voluntario_id")
-  private Voluntarios voluntarios;
+  private Voluntario voluntarios;
   @ManyToOne
   @JoinColumn(name = "idoso_id")
   private Idoso idosos;
