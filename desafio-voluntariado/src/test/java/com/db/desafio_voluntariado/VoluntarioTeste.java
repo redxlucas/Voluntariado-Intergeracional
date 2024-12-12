@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +22,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.db.desafio_voluntariado.entities.AtividadeDeInteresse;
 import com.db.desafio_voluntariado.entities.Usuario;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
+import com.db.desafio_voluntariado.entities.Voluntario;
 import com.db.desafio_voluntariado.exception.NotFoundException;
 import com.db.desafio_voluntariado.repository.UsuarioRepository;
 import com.db.desafio_voluntariado.services.UsuarioService;
 
 @SpringBootTest
-public class UsuarioTeste {
+public class VoluntarioTeste {
 
     @InjectMocks
     private UsuarioService usuarioService;
@@ -39,37 +38,37 @@ public class UsuarioTeste {
     @Mock
     private UsuarioRepository usuarioRepository;
 
-    private Usuario usuario;
+    private Voluntario voluntario;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        usuario = new Usuario();
+        voluntario = new Voluntario();
     }
 
     @Test
     void testAdicionarUsuario() {
-        Usuario usuario = new Usuario();
-        usuario.setId(1);
-        usuario.setNomeCompleto("João Silva");
+        voluntario = new Voluntario();
+        voluntario.setId(1);
+        voluntario.setNomeCompleto("João Silva");
 
-        when(usuarioRepository.save(usuario)).thenReturn(usuario);
+        when(usuarioRepository.save(voluntario)).thenReturn(voluntario);
 
-        Usuario savedUsuario = usuarioService.add(usuario);
+        Usuario savedUsuario = usuarioService.add(voluntario);
 
         assertNotNull(savedUsuario);
         assertEquals(1, savedUsuario.getId());
         assertEquals("João Silva", savedUsuario.getNomeCompleto());
-        verify(usuarioRepository, times(1)).save(usuario);
+        verify(usuarioRepository, times(1)).save(voluntario);
     }
 
     @Test
     void testGetOne() {
-        Usuario usuario = new Usuario();
-        usuario.setId(1);
-        usuario.setNomeCompleto("João Silva");
+        voluntario = new Voluntario();
+        voluntario.setId(1);
+        voluntario.setNomeCompleto("João Silva");
 
-        when(usuarioRepository.findById(1)).thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findById(1)).thenReturn(Optional.of(voluntario));
 
         UsuarioDTO usuarioDTO = usuarioService.getOne(1);
 
@@ -91,15 +90,15 @@ public class UsuarioTeste {
 
     @Test
     void testGetAll() {
-        Usuario usuario1 = new Usuario();
-        usuario1.setId(1);
-        usuario1.setNomeCompleto("João Silva");
+        Voluntario voluntario1 = new Voluntario();
+        voluntario1.setId(1);
+        voluntario1.setNomeCompleto("João Silva");
 
-        Usuario usuario2 = new Usuario();
-        usuario2.setId(2);
-        usuario2.setNomeCompleto("Maria Oliveira");
+        Voluntario voluntario2 = new Voluntario();
+        voluntario2.setId(2);
+        voluntario2.setNomeCompleto("Maria Oliveira");
 
-        List<Usuario> usuarios = Arrays.asList(usuario1, usuario2);
+        List<Usuario> usuarios = Arrays.asList(voluntario1, voluntario2);
 
         when(usuarioRepository.findAll()).thenReturn(usuarios);
 
@@ -125,16 +124,16 @@ public class UsuarioTeste {
     }
     @Test
     public void setTest(){
-        usuario.setNomeCompleto("Maria Julia Antunes");
-        usuario.setDataDeNascimento(LocalDate.of(2024, 12, 11));
-        usuario.setCep("12345-678");
-        usuario.setBairro("Partenon");
-        usuario.setCidade("Porto Alegre");
-        usuario.setEstado("RS");
-        usuario.setCpf("123.456.789-00");
-        usuario.setTelefone("(11) 98765-4321");
-        usuario.setEmail("maju.antunes@example.com");
-        usuario.setSenha("senha123");
+        voluntario.setNomeCompleto("Maria Julia Antunes");
+        voluntario.setDataDeNascimento(LocalDate.of(2024, 12, 11));
+        voluntario.setCep("12345-678");
+        voluntario.setBairro("Partenon");
+        voluntario.setCidade("Porto Alegre");
+        voluntario.setEstado("RS");
+        voluntario.setCpf("123.456.789-00");
+        voluntario.setTelefone("(11) 98765-4321");
+        voluntario.setEmail("maju.antunes@example.com");
+        voluntario.setSenha("senha123");
     }
 
 //     @Test
@@ -165,26 +164,26 @@ public class UsuarioTeste {
     @Test
     void testCalcularIdade() {
         
-        usuario.setDataDeNascimento(LocalDate.of(2000, Month.JANUARY, 1));
+        voluntario.setDataDeNascimento(LocalDate.of(2000, Month.JANUARY, 1));
 
-        usuario.calcularIdade();
+        voluntario.calcularIdade();
 
         int expectedAge = LocalDate.now().getYear() - 2000;
         if (LocalDate.now().getDayOfYear() < LocalDate.of(2000, Month.JANUARY, 1).getDayOfYear()) {
             expectedAge--;
         }
 
-        assertEquals(expectedAge, usuario.getIdade());
+        assertEquals(expectedAge, voluntario.getIdade());
     }
 
     @Test
     void testCalcularIdadeSemDataDeNascimento() {
         
-        usuario.setDataDeNascimento(null);
+        voluntario.setDataDeNascimento(null);
 
         // Simula o ciclo de persistência chamando o método @PrePersist
-        usuario.calcularIdade();
+        voluntario.calcularIdade();
 
-        assertNull(usuario.getIdade());
+        assertNull(voluntario.getIdade());
     }
 }
