@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.db.desafio_voluntariado.entities.Idoso;
 import com.db.desafio_voluntariado.entities.Usuario;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
+import com.db.desafio_voluntariado.entities.Voluntario;
 import com.db.desafio_voluntariado.exception.NotFoundException;
 import com.db.desafio_voluntariado.repository.UsuarioRepository;
 
@@ -30,8 +32,20 @@ public class UsuarioService {
 
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
-            return new UsuarioDTO(usuario.getId(), usuario.getNomeCompleto(), usuario.getIdade(), usuario.getTelefone(),
-                    usuario.getEmail(), usuario.getAtividadeDeInteresseList());
+            String tipoUsuario = null;
+            if (usuario instanceof Idoso) {
+                tipoUsuario = "IDOSO";
+            } else if (usuario instanceof Voluntario) {
+                tipoUsuario = "VOLUNTARIO";
+            }
+
+            if (tipoUsuario == null) {
+                throw new IllegalArgumentException("Tipo de usuário não encontrado.");
+            }
+
+            return new UsuarioDTO(usuario.getId(), usuario.getNomeCompleto(), usuario.getIdade(), 
+                    usuario.getTelefone(), usuario.getEmail(), tipoUsuario, 
+                    usuario.getAtividadeDeInteresseList());
         } else {
             throw new NotFoundException("Usuario não encontrado.");
         }
@@ -42,9 +56,24 @@ public class UsuarioService {
         if (usuarioList.isEmpty()) {
             throw new NotFoundException("Usuario(s) não encontrado(s)");
         }
-        return usuarioList.stream().map(
-                usuario -> new UsuarioDTO(usuario.getId(), usuario.getNomeCompleto(), usuario.getIdade(),
-                        usuario.getTelefone(), usuario.getEmail(), usuario.getAtividadeDeInteresseList()))
+
+        return usuarioList.stream()
+                .map(usuario -> {
+                    String tipoUsuario = null;
+                    if (usuario instanceof Idoso) {
+                        tipoUsuario = "IDOSO";
+                    } else if (usuario instanceof Voluntario) {
+                        tipoUsuario = "VOLUNTARIO";
+                    }
+
+                    if (tipoUsuario == null) {
+                        throw new IllegalArgumentException("Tipo de usuário não encontrado.");
+                    }
+
+                    return new UsuarioDTO(usuario.getId(), usuario.getNomeCompleto(), usuario.getIdade(),
+                            usuario.getTelefone(), usuario.getEmail(), tipoUsuario,
+                            usuario.getAtividadeDeInteresseList());
+                })
                 .collect(Collectors.toList());
     }
 }

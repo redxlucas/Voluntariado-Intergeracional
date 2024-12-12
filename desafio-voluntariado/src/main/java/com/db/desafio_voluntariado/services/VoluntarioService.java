@@ -34,7 +34,7 @@ public class VoluntarioService {
         }
         return voluntarioList.stream().map(
                 voluntario -> new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(),
-                        voluntario.getTelefone(), voluntario.getEmail(), voluntario.getAtividadeDeInteresseList()))
+                        voluntario.getTelefone(), voluntario.getEmail(), "VOLUNTARIO", voluntario.getAtividadeDeInteresseList()))
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +44,7 @@ public class VoluntarioService {
         if (voluntarioOptional.isPresent()) {
             Voluntario voluntario = voluntarioOptional.get();
             return new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(), voluntario.getTelefone(),
-                    voluntario.getEmail(), voluntario.getAtividadeDeInteresseList());
+                    voluntario.getEmail(), "VOLUNTARIO", voluntario.getAtividadeDeInteresseList());
         } else {
             throw new NotFoundException("Voluntario não encontrado.");
         }
