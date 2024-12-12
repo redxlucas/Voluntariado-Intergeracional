@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Atividades {
+public class Atividade {
   @Id
   private String id;
   // presencial ou remoto
@@ -22,7 +22,4 @@ public class Atividades {
   private String local;
   @Column(nullable = false)
   private Boolean confirmacao;
-  @ManyToOne
-  @JoinColumn(name = "area_de_interesse_id")
-  private AreasDeInteresse areasDeInteresse;
 }

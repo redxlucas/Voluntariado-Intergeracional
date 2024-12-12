@@ -16,7 +16,7 @@ import com.db.desafio_voluntariado.repository.FeedbackRepository;
 public class FeedbackService {
 
     @Autowired
-    FeedbackRepository feedbackRepository;
+    private FeedbackRepository feedbackRepository;
 
      public Feedback adicionar(Feedback feedback) {
         if (feedback.getNota() < 1 || feedback.getNota() > 5) {
