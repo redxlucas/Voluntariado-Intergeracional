@@ -9,5 +9,4 @@ import com.db.desafio_voluntariado.entities.Idoso;
 
 @Repository
 public interface IdosoRepository extends CrudRepository<Idoso, Integer> {
-    List<Idoso> findByNecessidadesEspeciais(String necessidadesEspeciais);
 }

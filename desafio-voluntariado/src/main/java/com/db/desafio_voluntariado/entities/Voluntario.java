@@ -8,6 +8,5 @@ import lombok.Data;
 @Data
 @DiscriminatorValue("VOLUNTARIO")
 public class Voluntario extends Usuario {
-    private String especialidade;
     private Integer totalPontos;
 }

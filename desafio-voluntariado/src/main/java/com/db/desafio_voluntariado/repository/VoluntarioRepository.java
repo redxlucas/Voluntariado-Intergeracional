@@ -9,5 +9,4 @@ import com.db.desafio_voluntariado.entities.Voluntario;
 
 @Repository
 public interface VoluntarioRepository extends CrudRepository<Voluntario, Integer> {
-    List<Voluntario> findByEspecialidade(String especialidade);
 }

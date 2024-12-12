@@ -30,12 +30,12 @@ public class VoluntarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> getIdosoById(@PathVariable Integer id) {
+    public ResponseEntity<UsuarioDTO> getVoluntarioById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(voluntarioService.getOne(id));
     }
 
     @GetMapping("/todos")
-    public List<UsuarioDTO> getAllIdosos() {
+    public List<UsuarioDTO> getAllVoluntarios() {
         return voluntarioService.getAll();
     }
 

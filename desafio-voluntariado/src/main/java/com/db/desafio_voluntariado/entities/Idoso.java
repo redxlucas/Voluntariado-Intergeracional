@@ -9,9 +9,6 @@ import lombok.Data;
 @Data
 @DiscriminatorValue("IDOSO")
 public class Idoso extends Usuario {
-    private String necessidadesEspeciais;
-
     private String nomeResponsavel;
-
     private String telefoneResponsavel;
 }
