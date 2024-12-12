@@ -20,6 +20,6 @@ public class Feedback {
   @Column(nullable = false)
   private Integer nota;
   @ManyToOne
-  @JoinColumn(name = "idoso_id")
-  private Idoso idosos;
+  @JoinColumn(name = "usuario_id")
+  private Usuario usuario;
 }
