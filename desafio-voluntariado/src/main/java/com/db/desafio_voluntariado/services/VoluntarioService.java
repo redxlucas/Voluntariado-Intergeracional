@@ -8,14 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.db.desafio_voluntariado.entities.Voluntario;
-import com.db.desafio_voluntariado.entities.Pontuacao;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
-import com.db.desafio_voluntariado.entities.Voluntario;
 import com.db.desafio_voluntariado.exception.NotFoundException;
-import com.db.desafio_voluntariado.repository.PontuacaoRepository;
 import com.db.desafio_voluntariado.repository.VoluntarioRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
