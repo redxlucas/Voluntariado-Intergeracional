@@ -12,12 +12,15 @@ import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.exception.NotFoundException;
 import com.db.desafio_voluntariado.repository.UsuarioRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Transactional
     public Usuario add(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
@@ -28,7 +31,7 @@ public class UsuarioService {
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
             return new UsuarioDTO(usuario.getId(), usuario.getNomeCompleto(), usuario.getIdade(), usuario.getTelefone(),
-                    usuario.getEmail(), usuario.getTipoDeUsuario(), usuario.getAtividadeDeInteresseList());
+                    usuario.getEmail(), usuario.getAtividadeDeInteresseList());
         } else {
             throw new NotFoundException("Usuario não encontrado.");
         }
@@ -41,7 +44,7 @@ public class UsuarioService {
         }
         return usuarioList.stream().map(
                 usuario -> new UsuarioDTO(usuario.getId(), usuario.getNomeCompleto(), usuario.getIdade(),
-                        usuario.getTelefone(), usuario.getEmail(), usuario.getTipoDeUsuario(), usuario.getAtividadeDeInteresseList()))
+                        usuario.getTelefone(), usuario.getEmail(), usuario.getAtividadeDeInteresseList()))
                 .collect(Collectors.toList());
     }
 }

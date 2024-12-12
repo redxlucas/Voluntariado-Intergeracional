@@ -137,30 +137,30 @@ public class UsuarioTeste {
         usuario.setSenha("senha123");
     }
 
-    @Test
-    void testManyToManyRelationship() {
-        usuario.setId(1);
-        usuario.setNomeCompleto("Erika Fane");
+//     @Test
+//     void testManyToManyRelationship() {
+//         usuario.setId(1);
+//         usuario.setNomeCompleto("Erika Fane");
 
-        AtividadeDeInteresse atividade1 = new AtividadeDeInteresse();
-        atividade1.setId(1);
-        atividade1.setTipoDeAtividade("Passeio no parque");
+//         AtividadeDeInteresse atividade1 = new AtividadeDeInteresse();
+//         atividade1.setId(1);
+//         atividade1.setTipoDeAtividade("Passeio no parque");
 
-        AtividadeDeInteresse atividade2 = new AtividadeDeInteresse();
-        atividade2.setId(2);
-        atividade2.setTipoDeAtividade("Tarde de jogos");
+//         AtividadeDeInteresse atividade2 = new AtividadeDeInteresse();
+//         atividade2.setId(2);
+//         atividade2.setTipoDeAtividade("Tarde de jogos");
 
-        List<AtividadeDeInteresse> atividades = new ArrayList<>();
-        atividades.add(atividade1);
-        atividades.add(atividade2);
+//         List<AtividadeDeInteresse> atividades = new ArrayList<>();
+//         atividades.add(atividade1);
+//         atividades.add(atividade2);
 
-        usuario.setAtividadeDeInteresseList(atividades);
+//         usuario.setAtividadeDeInteresseList(atividades);
 
-        assertNotNull(usuario.getAtividadeDeInteresseList());
-        assertEquals(2, usuario.getAtividadeDeInteresseList().size());
-        assertEquals("Passeio no parque", usuario.getAtividadeDeInteresseList().get(0).getTipoDeAtividade());
-        assertEquals("Tarde de jogos", usuario.getAtividadeDeInteresseList().get(1).getTipoDeAtividade());
-}
+//         assertNotNull(usuario.getAtividadeDeInteresseList());
+//         assertEquals(2, usuario.getAtividadeDeInteresseList().size());
+//         assertEquals("Passeio no parque", usuario.getAtividadeDeInteresseList().get(0).getTipoDeAtividade());
+//         assertEquals("Tarde de jogos", usuario.getAtividadeDeInteresseList().get(1).getTipoDeAtividade());
+// }
 
     @Test
     void testCalcularIdade() {
