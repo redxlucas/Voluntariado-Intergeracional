@@ -1,7 +1,6 @@
 package com.db.desafio_voluntariado.controller;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,9 +55,9 @@ public class AtividadeInteresseController {
 
     // Buscar atividades de interesse de um usuário
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<Set<AtividadeDeInteresse>> buscarAtividadesDoUsuario(
+    public ResponseEntity<List<AtividadeDeInteresse>> buscarAtividadesDoUsuario(
             @PathVariable Integer usuarioId) {
-        Set<AtividadeDeInteresse> atividades = atividadeDeInteresseService.buscarAtividadesDoUsuario(usuarioId);
+        List<AtividadeDeInteresse> atividades = atividadeDeInteresseService.buscarAtividadesDoUsuario(usuarioId);
         return ResponseEntity.ok(atividades);
     }
 }

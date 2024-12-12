@@ -2,7 +2,6 @@ package com.db.desafio_voluntariado.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,7 +69,7 @@ public class AtividadeDeInteresseService {
     }
 
     // Buscar todas as atividades de interesse de um usuário
-    public Set<AtividadeDeInteresse> buscarAtividadesDoUsuario(Integer usuarioId) {
+    public List<AtividadeDeInteresse> buscarAtividadesDoUsuario(Integer usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
         

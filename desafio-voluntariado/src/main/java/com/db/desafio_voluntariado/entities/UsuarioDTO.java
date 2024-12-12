@@ -1,6 +1,6 @@
 package com.db.desafio_voluntariado.entities;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
@@ -25,5 +25,5 @@ public class UsuarioDTO {
     @Column(nullable = false)
     private String email;
     
-    private Set<AtividadeDeInteresse> atividadeDeInteresse;
+    private List<AtividadeDeInteresse> atividadeDeInteresse;
 }

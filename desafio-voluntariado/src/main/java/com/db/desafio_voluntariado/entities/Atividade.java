@@ -1,6 +1,5 @@
 package com.db.desafio_voluntariado.entities;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
