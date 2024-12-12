@@ -2,8 +2,8 @@ package com.db.desafio_voluntariado.entities;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -82,7 +82,7 @@ public abstract class Usuario {
         inverseJoinColumns = @JoinColumn(name = "atividade_de_interesse_id")
     )
     @JsonManagedReference
-    private Set<AtividadeDeInteresse> atividadeDeInteresseList = new HashSet<>();
+    private List<AtividadeDeInteresse> atividadeDeInteresseList = new ArrayList<>();
 
   @PrePersist
   public void calcularIdade() {
