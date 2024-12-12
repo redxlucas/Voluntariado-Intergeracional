@@ -1,7 +1,9 @@
 package com.db.desafio_voluntariado.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -21,9 +23,10 @@ public class AtividadeDeInteresse {
   @GeneratedValue
   private Integer id;
   @Column(nullable = false)
-  private String tipoDeAtividade;
+  private String nome;
+  private String descricao;
   
   @ManyToMany(mappedBy = "atividadeDeInteresseList")
   @JsonBackReference
-  private List<Usuario> usuarioList = new ArrayList<>();
+  private Set<Usuario> usuarios = new HashSet<>();
 }
