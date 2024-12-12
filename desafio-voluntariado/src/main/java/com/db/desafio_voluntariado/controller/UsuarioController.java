@@ -11,7 +11,6 @@ import com.db.desafio_voluntariado.entities.Usuario;
 import com.db.desafio_voluntariado.services.UsuarioService;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
