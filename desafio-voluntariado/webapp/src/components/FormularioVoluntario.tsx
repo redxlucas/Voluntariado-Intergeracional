@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-// Interface to define the structure of volunteer data
 interface Voluntario {
-  nomeCompleto: string;
-  dataDeNascimento: string;
-  cep: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
-  email: string;
-  senha: string;
-  cpf: string;
-  telefone: string;
-  areasInteresse: string[];
-  disponibilidade: string;
+    nomeCompleto: string;
+    dataDeNascimento: string;
+    cep: string;
+    bairro: string;
+    cidade: string;
+    estado: string;
+    telefone: string;
+    email: string;
+    senha: string;
+    cpf: string;
 }
 
-const FormularioVoluntario: React.FC = () => {
+function FormularioVoluntario() {
   const [formData, setFormData] = useState<Voluntario>({
     nomeCompleto: "",
     dataDeNascimento: "",
@@ -25,34 +22,17 @@ const FormularioVoluntario: React.FC = () => {
     bairro: "",
     cidade: "",
     estado: "",
+    telefone: "",
     email: "",
     senha: "",
     cpf: "",
-    telefone: "",
-    areasInteresse: [],
-    disponibilidade: "",
   });
 
-  // State to store backend response
-  const [responseData, setResponseData] = useState<any>(null);
-
-  // Handle input changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    }));
-  };
-
-  // Handle checkbox changes for areas of interest
-  const handleInterestChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      areasInteresse: checked
-        ? [...prevState.areasInteresse, value]
-        : prevState.areasInteresse.filter(area => area !== value)
     }));
   };
 
@@ -82,92 +62,80 @@ const FormularioVoluntario: React.FC = () => {
     }
   };
 
-  const formatDate = (date: string) => {
-    const [year, month, day] = date.split("-");
-    return `${day}/${month}/${year}`;
-  };
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formattedDataDeNascimento = formatDate(formData.dataDeNascimento);
-
-    const dataToSend = {
-      ...formData,
-      dataDeNascimento: formattedDataDeNascimento,
-    };
-
-    axios
-      .post('http://localhost:8080/voluntario', dataToSend)
-      .then((response) => {
-        console.log('Voluntário criado com sucesso:', response.data);
-        const voluntarioId = response.data.id;
-
-        axios
-          .get(`http://localhost:8080/voluntario/${voluntarioId}`)
-          .then((response) => {
-            console.log('Voluntário recuperado:', response.data);
-            setResponseData(response.data);
-          })
-          .catch((error) => {
-            console.error('Erro ao buscar dados do voluntário:', error);
-          });
-
-        // Reset form after submission
-        setFormData({
-          nomeCompleto: "",
-          dataDeNascimento: "",
-          cep: "",
-          bairro: "",
-          cidade: "",
-          estado: "",
-          email: "",
-          senha: "",
-          cpf: "",
-          telefone: "",
-          areasInteresse: [],
-          disponibilidade: "",
-        });
-      })
-      .catch((error) => {
-        console.error('Erro ao enviar dados para o backend:', error);
+    try {
+      const response = await axios.post('http://localhost:8080/voluntario', null, {
+        params: formData,
       });
+
+      console.log('Resposta do servidor:', response.data);
+      
+      setFormData({
+        nomeCompleto: "",
+        dataDeNascimento: "",
+        cep: "",
+        bairro: "",
+        cidade: "",
+        estado: "",
+        telefone: "",
+        email: "",
+        senha: "",
+        cpf: "",
+      });
+
+      alert('Dados enviados com sucesso!');
+    } catch (error: unknown) {
+      console.error('Erro ao enviar dados:', error);
+
+      if (axios.isAxiosError(error)) {
+        console.log('Erro na resposta do servidor:', error.response?.data);
+        alert(`Erro: ${error.response?.data?.message || 'Ocorreu um erro inesperado'}`);
+      } else {
+        alert('Erro inesperado ao enviar dados');
+      }
+    }
   };
 
   return (
     <div>
-      {/* Volunteer Registration Form */}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Nome Completo:</label>
+          <label htmlFor="nomeCompleto">Nome Completo</label>
           <input
             type="text"
+            id="nomeCompleto"
             name="nomeCompleto"
             value={formData.nomeCompleto}
             onChange={handleChange}
-            placeholder="Nome Completo"
+            required
+            placeholder="Digite seu nome completo"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="dataDeNascimento">Data de Nascimento:</label>
+          <input
+            type="date"
+            id="dataDeNascimento"
+            name="dataDeNascimento"
+            value={formData.dataDeNascimento}
+            onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label>Data de Nascimento:</label>
-          <input
-            type="date"
-            name="dataDeNascimento"
-            value={formData.dataDeNascimento}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>CEP:</label>
+          <label htmlFor="cep">CEP:</label>
           <input
             type="text"
             name="cep"
             value={formData.cep}
-            onChange={handleCepChange} // Alterado para usar handleCepChange
+            onChange={handleCepChange}
           />
         </div>
         <div>
-          <label>Bairro:</label>
+          <label htmlFor="dataDeNascimento">Bairro:</label>
           <input
             type="text"
             name="bairro"
@@ -176,7 +144,7 @@ const FormularioVoluntario: React.FC = () => {
           />
         </div>
         <div>
-          <label>Cidade:</label>
+          <label htmlFor="dataDeNascimento">Cidade:</label>
           <input
             type="text"
             name="cidade"
@@ -185,7 +153,7 @@ const FormularioVoluntario: React.FC = () => {
           />
         </div>
         <div>
-          <label>Estado:</label>
+          <label htmlFor="dataDeNascimento">Estado:</label>
           <input
             type="text"
             name="estado"
@@ -194,18 +162,19 @@ const FormularioVoluntario: React.FC = () => {
           />
         </div>
         <div>
-          <label>Email:</label>
+          <label htmlFor="email">Email</label>
           <input
             type="email"
+            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="Email"
             required
+            placeholder="Digite seu email"
           />
         </div>
         <div>
-          <label>Senha:</label>
+          <label htmlFor="senha">Senha:</label>
           <input
             type="password"
             name="senha"
@@ -216,7 +185,7 @@ const FormularioVoluntario: React.FC = () => {
           />
         </div>
         <div>
-          <label>CPF:</label>
+          <label htmlFor="cpf">CPF:</label>
           <input
             type="text"
             name="cpf"
@@ -227,7 +196,7 @@ const FormularioVoluntario: React.FC = () => {
           />
         </div>
         <div>
-          <label>Telefone:</label>
+          <label htmlFor="telefone">Telefone:</label>
           <input
             type="text"
             name="telefone"
@@ -237,65 +206,12 @@ const FormularioVoluntario: React.FC = () => {
             required
           />
         </div>
-        <div>
-          <label>Áreas de Interesse:</label>
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                value="Cuidados"
-                onChange={handleInterestChange}
-                checked={formData.areasInteresse.includes('Cuidados')}
-              />
-              Cuidados
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                value="Companhia"
-                onChange={handleInterestChange}
-                checked={formData.areasInteresse.includes('Companhia')}
-              />
-              Companhia
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                value="Atividades"
-                onChange={handleInterestChange}
-                checked={formData.areasInteresse.includes('Atividades')}
-              />
-              Atividades
-            </label>
-          </div>
-        </div>
-        <div>
-          <label>Disponibilidade:</label>
-          <select
-            name="disponibilidade"
-            value={formData.disponibilidade}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Selecione sua disponibilidade</option>
-            <option value="Manhã">Manhã</option>
-            <option value="Tarde">Tarde</option>
-            <option value="Noite">Noite</option>
-            <option value="Fins de Semana">Fins de Semana</option>
-          </select>
-        </div>
-        <button type="submit">Enviar</button>
+          <button type="submit">
+            Enviar
+          </button>
       </form>
-
-      {/* Displaying response in JSON */}
-      {responseData && (
-        <div>
-          <h2>Dados do Voluntário Criado:</h2>
-          <pre>{JSON.stringify(responseData, null, 2)}</pre>
-        </div>
-      )}
     </div>
   );
-};
+}
 
 export default FormularioVoluntario;

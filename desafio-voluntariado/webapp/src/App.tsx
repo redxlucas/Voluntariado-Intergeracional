@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 // Importar os componentes
 import FormularioIdoso from './components/FormularioIdoso';
 import FormularioVoluntario from './components/FormularioVoluntario';
-import FormularioLogin from './components/Login';  // Importando o novo componente de Login
+import Login from './components/Login';  // Importando o novo componente de Login
 
 const App: React.FC = () => {
   return (
@@ -27,7 +27,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/idoso" element={<FormularioIdoso />} />
           <Route path="/voluntario" element={<FormularioVoluntario />} />
-          <Route path="/login" element={<FormularioLogin />} /> {/* Rota para a página de login */}
+          <Route path="/login" element={<Login />} /> {/* Rota para a página de login */}
           <Route path="/" element={<div>Selecione um tipo de cadastro</div>} />
         </Routes>
       </div>

@@ -42,6 +42,7 @@ public abstract class Usuario {
 
   @JsonFormat(pattern = "dd-MM-yyyy")
   @DateTimeFormat(pattern = "dd-MM-yyyy")
+  @Column(nullable = false)
   private LocalDate dataDeNascimento;
 
   private Integer idade;
@@ -51,11 +52,6 @@ public abstract class Usuario {
 
   @Column(nullable = false)
   private String cep;
-
-  @Column(nullable = false)
-  private String rua;
-
-  private String complemento;
 
   @Column(nullable = false)
   private String bairro;
