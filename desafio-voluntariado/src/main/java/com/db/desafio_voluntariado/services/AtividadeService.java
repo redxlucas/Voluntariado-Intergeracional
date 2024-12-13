@@ -46,12 +46,10 @@ public class AtividadeService {
     public Atividade getOne(Integer id) {
         Optional<Atividade> atividadeOptional = atividadeRepository.findById(id);
 
-        if (atividadeOptional.isPresent()) {
-            Atividade atividade = atividadeOptional.get();
-            return atividade;
-        } else {
+        if (atividadeOptional.isEmpty()) {
             throw new NotFoundException("Atividade não encontrado.");
         }
+        return atividadeOptional.get();
     }
 
     public List<Atividade> getAll() {
