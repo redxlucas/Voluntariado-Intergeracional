@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.db.desafio_voluntariado.entities.Atividade;
+import com.db.desafio_voluntariado.entities.AtividadeDeInteresse;
 import com.db.desafio_voluntariado.entities.Idoso;
 import com.db.desafio_voluntariado.entities.Voluntario;
 import com.db.desafio_voluntariado.exception.NotFoundException;
+import com.db.desafio_voluntariado.repository.AtividadeDeInteresseRepository;
 import com.db.desafio_voluntariado.repository.AtividadeRepository;
 import com.db.desafio_voluntariado.repository.IdosoRepository;
 import com.db.desafio_voluntariado.repository.VoluntarioRepository;
@@ -24,6 +26,9 @@ public class AtividadeService {
     private AtividadeRepository atividadeRepository;
 
     @Autowired
+    private AtividadeDeInteresseRepository atividadeDeInteresseRepository;
+
+    @Autowired
     private IdosoRepository idosoRepository;
 
     @Autowired
@@ -31,6 +36,10 @@ public class AtividadeService {
 
     @Transactional
     public Atividade adicionarAtividade(Atividade atividade) {
+        AtividadeDeInteresse atividadeDeInteresse = atividadeDeInteresseRepository.findById(atividade.getAtividadeDeInteresse().getId())
+                .orElseThrow(() -> new NotFoundException("Atividade de interesse não encontrado"));
+        
+        atividade.setNome(atividadeDeInteresse.getNome());
         return atividadeRepository.save(atividade);
     }
 
