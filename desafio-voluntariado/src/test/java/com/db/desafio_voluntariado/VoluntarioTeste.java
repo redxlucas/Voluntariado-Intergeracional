@@ -29,7 +29,7 @@ import com.db.desafio_voluntariado.exception.NotFoundException;
 import com.db.desafio_voluntariado.repository.VoluntarioRepository;
 import com.db.desafio_voluntariado.services.VoluntarioService;
 
-@SpringBootTest
+@SpringBootTest(classes = Voluntario.class)
 public class VoluntarioTeste {
 
     @InjectMocks

@@ -25,7 +25,7 @@ import com.db.desafio_voluntariado.repository.IdosoRepository;
 import com.db.desafio_voluntariado.services.IdosoService;
 
 
-@SpringBootTest
+@SpringBootTest(classes = Idoso.class)
 public class IdosoTeste {
 
         @InjectMocks
@@ -98,7 +98,5 @@ public class IdosoTeste {
 
         assertEquals("Idoso(s) não encontrado(s)", exception.getMessage());
         verify(idosoRepository, times(1)).findAll();
-
-    
     }
 }

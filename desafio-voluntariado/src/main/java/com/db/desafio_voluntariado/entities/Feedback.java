@@ -6,12 +6,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
 
 @Data
 @Entity
-@AllArgsConstructor
 public class Feedback {
 @Id
   private Integer id;
