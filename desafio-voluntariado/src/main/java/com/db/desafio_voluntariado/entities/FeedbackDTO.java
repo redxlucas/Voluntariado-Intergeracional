@@ -23,5 +23,5 @@ public class FeedbackDTO {
 
     private UsuarioDTO usuario;
     
-    private Atividade atividade;
+    private AtividadeDTO atividade;
 }

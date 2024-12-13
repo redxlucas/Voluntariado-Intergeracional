@@ -23,8 +23,10 @@ public class VoluntarioService {
     // private PontuacaoRepository pontosRepository;
 
     @Transactional
-    public Voluntario adicionarVoluntario(Voluntario voluntario) {
-        return voluntarioRepository.save(voluntario);
+    public UsuarioDTO adicionarVoluntario(Voluntario voluntario) {
+        Voluntario novoVoluntario = voluntarioRepository.save(voluntario);
+        return new UsuarioDTO(novoVoluntario.getId(), novoVoluntario.getNomeCompleto(), novoVoluntario.getIdade(),
+                    novoVoluntario.getTelefone(), novoVoluntario.getEmail(), "VOLUNTARIO", novoVoluntario.getAtividadeDeInteresseList());
     }
 
     public List<UsuarioDTO> getAll() {

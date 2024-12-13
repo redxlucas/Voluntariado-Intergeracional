@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.db.desafio_voluntariado.entities.Atividade;
+import com.db.desafio_voluntariado.entities.AtividadeDTO;
 import com.db.desafio_voluntariado.services.AtividadeService;
 
 @RestController
@@ -28,17 +29,22 @@ public class AtividadeController {
             .body(atividadeService.adicionarAtividade(atividade));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Atividade>> listarAtividades() {
+    @GetMapping("/{id}")
+    public ResponseEntity<AtividadeDTO> getVoluntarioById(@PathVariable Integer id) {
+        return ResponseEntity.ok().body(atividadeService.getOne(id));
+    }
+
+    @GetMapping("/todos")
+    public ResponseEntity<List<AtividadeDTO>> listarAtividades() {
         return ResponseEntity.ok(atividadeService.getAll());
     }
 
     @PostMapping("/{atividadeId}/participantes")
-    public ResponseEntity<Atividade> adicionarParticipante(
+    public ResponseEntity<AtividadeDTO> adicionarParticipante(
             @PathVariable Integer atividadeId,
             Integer idosoId, 
             Integer voluntarioId) {
-        Atividade atividadeAtualizada = atividadeService.adicionarParticipante(atividadeId, idosoId, voluntarioId);
+        AtividadeDTO atividadeAtualizada = atividadeService.adicionarParticipante(atividadeId, idosoId, voluntarioId);
         return ResponseEntity.ok(atividadeAtualizada);
     }
 }

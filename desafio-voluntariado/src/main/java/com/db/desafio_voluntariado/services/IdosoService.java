@@ -20,8 +20,10 @@ public class IdosoService {
     private IdosoRepository idosoRepository;
 
     @Transactional
-    public Idoso adicionarIdoso(Idoso idoso) {
-        return idosoRepository.save(idoso);
+    public UsuarioDTO adicionarIdoso(Idoso idoso) {
+        Idoso novoIdoso = idosoRepository.save(idoso);
+        return new UsuarioDTO(novoIdoso.getId(), novoIdoso.getNomeCompleto(), novoIdoso.getIdade(),
+                novoIdoso.getTelefone(), novoIdoso.getEmail(), "IDOSO", novoIdoso.getAtividadeDeInteresseList());
     }
 
     public List<UsuarioDTO> getAll() {
