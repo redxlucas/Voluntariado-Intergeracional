@@ -37,7 +37,6 @@ public class AtividadeDeInteresseService {
         return atividadeDeInteresseList;
     }
 
-    // Buscar atividade por ID
     public Optional<AtividadeDeInteresse> buscarAtividadePorId(Integer id) {
         return atividadeDeInteresseRepository.findById(id);
     }
@@ -55,7 +54,6 @@ public class AtividadeDeInteresseService {
         return usuarioRepository.save(usuario);
     }
 
-    // Desvincular uma atividade de interesse de um usuário
     @Transactional
     public Usuario desvincularAtividadeDoUsuario(Integer usuarioId, Integer atividadeId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -68,7 +66,6 @@ public class AtividadeDeInteresseService {
         return usuarioRepository.save(usuario);
     }
 
-    // Buscar todas as atividades de interesse de um usuário
     public List<AtividadeDeInteresse> buscarAtividadesDoUsuario(Integer usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
