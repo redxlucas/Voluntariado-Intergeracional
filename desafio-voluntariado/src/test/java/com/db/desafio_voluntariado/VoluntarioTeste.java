@@ -26,17 +26,17 @@ import com.db.desafio_voluntariado.entities.Usuario;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.entities.Voluntario;
 import com.db.desafio_voluntariado.exception.NotFoundException;
-import com.db.desafio_voluntariado.repository.UsuarioRepository;
-import com.db.desafio_voluntariado.services.UsuarioService;
+import com.db.desafio_voluntariado.repository.VoluntarioRepository;
+import com.db.desafio_voluntariado.services.VoluntarioService;
 
 @SpringBootTest
 public class VoluntarioTeste {
 
     @InjectMocks
-    private UsuarioService usuarioService;
+    private VoluntarioService voluntarioService;
 
     @Mock
-    private UsuarioRepository usuarioRepository;
+    private VoluntarioRepository voluntarioRepository;
 
     private Voluntario voluntario;
 
@@ -52,14 +52,14 @@ public class VoluntarioTeste {
         voluntario.setId(1);
         voluntario.setNomeCompleto("João Silva");
 
-        when(usuarioRepository.save(voluntario)).thenReturn(voluntario);
+        when(voluntarioRepository.save(voluntario)).thenReturn(voluntario);
 
-        Usuario savedUsuario = usuarioService.add(voluntario);
+        Usuario savedUsuario = voluntarioService.adicionarVoluntario(voluntario);
 
         assertNotNull(savedUsuario);
         assertEquals(1, savedUsuario.getId());
         assertEquals("João Silva", savedUsuario.getNomeCompleto());
-        verify(usuarioRepository, times(1)).save(voluntario);
+        verify(voluntarioRepository, times(1)).save(voluntario);
     }
 
     @Test
@@ -68,24 +68,24 @@ public class VoluntarioTeste {
         voluntario.setId(1);
         voluntario.setNomeCompleto("João Silva");
 
-        when(usuarioRepository.findById(1)).thenReturn(Optional.of(voluntario));
+        when(voluntarioRepository.findById(1)).thenReturn(Optional.of(voluntario));
 
-        UsuarioDTO usuarioDTO = usuarioService.getOne(1);
+        UsuarioDTO usuarioDTO = voluntarioService.getOne(1);
 
         assertNotNull(usuarioDTO);
         assertEquals(1, usuarioDTO.getId());
         assertEquals("João Silva", usuarioDTO.getNomeCompleto());
-        verify(usuarioRepository, times(1)).findById(1);
+        verify(voluntarioRepository, times(1)).findById(1);
     }
 
     @Test
     void testGetOneNotFoundException() {
-        when(usuarioRepository.findById(1)).thenReturn(Optional.empty());
+        when(voluntarioRepository.findById(1)).thenReturn(Optional.empty());
 
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> usuarioService.getOne(1));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> voluntarioService.getOne(1));
 
-        assertEquals("Usuario não encontrado.", exception.getMessage());
-        verify(usuarioRepository, times(1)).findById(1);
+        assertEquals("Voluntario não encontrado.", exception.getMessage());
+        verify(voluntarioRepository, times(1)).findById(1);
     }
 
     @Test
@@ -98,27 +98,27 @@ public class VoluntarioTeste {
         voluntario2.setId(2);
         voluntario2.setNomeCompleto("Maria Oliveira");
 
-        List<Usuario> usuarios = Arrays.asList(voluntario1, voluntario2);
+        List<Voluntario> voluntarios = Arrays.asList(voluntario1, voluntario2);
 
-        when(usuarioRepository.findAll()).thenReturn(usuarios);
+        when(voluntarioRepository.findAll()).thenReturn(voluntarios);
 
-        List<UsuarioDTO> usuarioDTOList = usuarioService.getAll();
+        List<UsuarioDTO> usuarioDTOList = voluntarioService.getAll();
 
         assertNotNull(usuarioDTOList);
         assertEquals(2, usuarioDTOList.size());
         assertEquals("João Silva", usuarioDTOList.get(0).getNomeCompleto());
         assertEquals("Maria Oliveira", usuarioDTOList.get(1).getNomeCompleto());
-        verify(usuarioRepository, times(1)).findAll();
+        verify(voluntarioRepository, times(1)).findAll();
     }
 
     @Test
     void testGetAllNotFoundException() {
-        when(usuarioRepository.findAll()).thenReturn(Arrays.asList());
+        when(voluntarioRepository.findAll()).thenReturn(Arrays.asList());
 
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> usuarioService.getAll());
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> voluntarioService.getAll());
 
-        assertEquals("Usuario(s) não encontrado(s)", exception.getMessage());
-        verify(usuarioRepository, times(1)).findAll();
+        assertEquals("Voluntario(s) não encontrado(s)", exception.getMessage());
+        verify(voluntarioRepository, times(1)).findAll();
 
     
     }
@@ -134,6 +134,7 @@ public class VoluntarioTeste {
         voluntario.setTelefone("(11) 98765-4321");
         voluntario.setEmail("maju.antunes@example.com");
         voluntario.setSenha("senha123");
+        voluntario.setTotalPontos(4);
     }
 
 //     @Test
@@ -181,7 +182,6 @@ public class VoluntarioTeste {
         
         voluntario.setDataDeNascimento(null);
 
-        // Simula o ciclo de persistência chamando o método @PrePersist
         voluntario.calcularIdade();
 
         assertNull(voluntario.getIdade());
