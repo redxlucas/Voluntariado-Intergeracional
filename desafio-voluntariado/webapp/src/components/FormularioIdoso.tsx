@@ -106,6 +106,7 @@ function FormularioIdoso() {
 
   return (
     <div>
+      <h1>Cadastrar Idoso</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="nomeCompleto">Nome Completo</label>
