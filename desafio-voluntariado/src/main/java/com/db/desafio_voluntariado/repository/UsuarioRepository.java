@@ -10,4 +10,5 @@ import com.db.desafio_voluntariado.entities.Usuario;
 @Repository
 public interface UsuarioRepository extends CrudRepository<Usuario, Integer> {
     Optional<Usuario> findByNomeCompleto(String nomeCompleto);
+    Optional<Usuario> findByEmail(String email);
 }
