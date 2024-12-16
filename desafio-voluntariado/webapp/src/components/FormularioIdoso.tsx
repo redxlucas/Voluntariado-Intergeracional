@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+// Interface para definir a estrutura dos dados que serão enviados
 interface Idoso {
-    nomeCompleto: string;
-    dataDeNascimento: string;
-    cep: string;
-    bairro: string;
-    cidade: string;
-    estado: string;
-    telefone: string;
-    email: string;
-    senha: string;
-    cpf: string;
-    nomeResponsavel: string;
-    telefoneResponsavel: string;
+  nomeCompleto: string;
+  dataDeNascimento: string;
+  cep: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  email: string;
+  senha: string;
+  cpf: string;
+  telefone: string;
+  nomeResponsavel: string;
+  telefoneResponsavel: string;
 }
 
-function FormularioIdoso() {
+const FormularioIdoso: React.FC = () => {
   const [formData, setFormData] = useState<Idoso>({
     nomeCompleto: "",
     dataDeNascimento: "",
@@ -24,18 +25,20 @@ function FormularioIdoso() {
     bairro: "",
     cidade: "",
     estado: "",
-    telefone: "",
     email: "",
     senha: "",
     cpf: "",
+    telefone: "",
     nomeResponsavel: "",
-    telefoneResponsavel: "",
+    telefoneResponsavel: ""
   });
+
+  const [responseData, setResponseData] = useState<any>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: value,
     }));
   };
@@ -66,82 +69,94 @@ function FormularioIdoso() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const formatDate = (date: string) => {
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post('http://localhost:8080/idoso', null, {
-        params: formData,
+    const formattedDataDeNascimento = formatDate(formData.dataDeNascimento);
+
+    const dataToSend = {
+      ...formData,
+      dataDeNascimento: formattedDataDeNascimento,
+    };
+
+    axios
+      .post('http://localhost:8080/idoso', dataToSend)
+      .then((response) => {
+        console.log('Idoso criado com sucesso:', response.data);
+        const idosoId = response.data.id;
+
+        // Busca os dados do idoso
+        axios
+          .get(`http://localhost:8080/idoso/${idosoId}`)
+          .then((response) => {
+            console.log('Idoso recuperado:', response.data);
+            setResponseData(response.data);
+          })
+          .catch((error) => {
+            console.error('Erro ao buscar dados do idoso:', error);
+          });
+
+        // Limpa os campos após envio
+        setFormData({
+          nomeCompleto: "",
+          dataDeNascimento: "",
+          cep: "",
+          bairro: "",
+          cidade: "",
+          estado: "",
+          email: "",
+          senha: "",
+          cpf: "",
+          telefone: "",
+          nomeResponsavel: "",
+          telefoneResponsavel: "",
+        });
+      })
+      .catch((error) => {
+        console.error('Erro ao enviar dados para o backend:', error);
       });
-
-      console.log('Resposta do servidor:', response.data);
-      
-      setFormData({
-        nomeCompleto: "",
-        dataDeNascimento: "",
-        cep: "",
-        bairro: "",
-        cidade: "",
-        estado: "",
-        telefone: "",
-        email: "",
-        senha: "",
-        cpf: "",
-        nomeResponsavel: "",
-        telefoneResponsavel: "",
-      });
-
-      alert('Dados enviados com sucesso!');
-    } catch (error: unknown) {
-      console.error('Erro ao enviar dados:', error);
-
-      if (axios.isAxiosError(error)) {
-        console.log('Erro na resposta do servidor:', error.response?.data);
-        alert(`Erro: ${error.response?.data?.message || 'Ocorreu um erro inesperado'}`);
-      } else {
-        alert('Erro inesperado ao enviar dados');
-      }
-    }
   };
 
   return (
     <div>
+      {/* Formulário de Cadastro */}
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="nomeCompleto">Nome Completo</label>
+          <label>Nome Completo:</label>
           <input
             type="text"
-            id="nomeCompleto"
             name="nomeCompleto"
             value={formData.nomeCompleto}
             onChange={handleChange}
+            placeholder="Nome Completo"
             required
-            placeholder="Digite seu nome completo"
           />
         </div>
-
         <div>
-          <label htmlFor="dataDeNascimento">Data de Nascimento:</label>
+          <label>Data de Nascimento:</label>
           <input
             type="date"
-            id="dataDeNascimento"
             name="dataDeNascimento"
             value={formData.dataDeNascimento}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
-          <label htmlFor="cep">CEP:</label>
+          <label>CEP:</label>
           <input
             type="text"
             name="cep"
             value={formData.cep}
-            onChange={handleCepChange}
+            onChange={handleCepChange} // Alterado para usar handleCepChange
           />
         </div>
         <div>
-          <label htmlFor="dataDeNascimento">Bairro:</label>
+          <label>Bairro:</label>
           <input
             type="text"
             name="bairro"
@@ -150,7 +165,7 @@ function FormularioIdoso() {
           />
         </div>
         <div>
-          <label htmlFor="dataDeNascimento">Cidade:</label>
+          <label>Cidade:</label>
           <input
             type="text"
             name="cidade"
@@ -159,7 +174,7 @@ function FormularioIdoso() {
           />
         </div>
         <div>
-          <label htmlFor="dataDeNascimento">Estado:</label>
+          <label>Estado:</label>
           <input
             type="text"
             name="estado"
@@ -168,19 +183,18 @@ function FormularioIdoso() {
           />
         </div>
         <div>
-          <label htmlFor="email">Email</label>
+          <label>Email:</label>
           <input
             type="email"
-            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
+            placeholder="Email"
             required
-            placeholder="Digite seu email"
           />
         </div>
         <div>
-          <label htmlFor="senha">Senha:</label>
+          <label>Senha:</label>
           <input
             type="password"
             name="senha"
@@ -191,7 +205,7 @@ function FormularioIdoso() {
           />
         </div>
         <div>
-          <label htmlFor="cpf">CPF:</label>
+          <label>CPF:</label>
           <input
             type="text"
             name="cpf"
@@ -202,7 +216,7 @@ function FormularioIdoso() {
           />
         </div>
         <div>
-          <label htmlFor="telefone">Telefone:</label>
+          <label>Telefone:</label>
           <input
             type="text"
             name="telefone"
@@ -213,7 +227,7 @@ function FormularioIdoso() {
           />
         </div>
         <div>
-          <label htmlFor="nomeResponsavel">Nome Responsável:</label>
+          <label>Nome Responsável:</label>
           <input
             type="text"
             name="nomeResponsavel"
@@ -224,7 +238,7 @@ function FormularioIdoso() {
           />
         </div>
         <div>
-          <label htmlFor="telefoneResponsavel">Telefone Responsável:</label>
+          <label>Telefone Responsável:</label>
           <input
             type="text"
             name="telefoneResponsavel"
@@ -234,12 +248,18 @@ function FormularioIdoso() {
             required
           />
         </div>
-          <button type="submit">
-            Enviar
-          </button>
+        <button type="submit">Enviar</button>
       </form>
+
+      {/* Exibindo a resposta em JSON */}
+      {responseData && (
+        <div>
+          <h2>Dados do Idoso Criado:</h2>
+          <pre>{JSON.stringify(responseData, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default FormularioIdoso;
