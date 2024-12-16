@@ -70,6 +70,7 @@
 // export default FormularioLogin;
 
 import React, { useState } from 'react';
+import '../styles/Login.css';
 import axios from 'axios';
 
 interface Login {
@@ -122,8 +123,8 @@ function Login() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        <h1>Logar no Unilaços</h1>
         <div>
-          <label htmlFor="email">Email</label>
           <input
             type="email"
             id="email"
@@ -131,11 +132,10 @@ function Login() {
             value={formData.email}
             onChange={handleChange}
             required
-            placeholder="Digite seu email"
+            placeholder="E-mail"
           />
         </div>
         <div>
-          <label htmlFor="senha">Senha:</label>
           <input
             type="password"
             name="senha"
@@ -146,7 +146,7 @@ function Login() {
           />
         </div>
           <button type="submit">
-            Enviar
+            Entrar
           </button>
       </form>
     </div>
