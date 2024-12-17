@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.db.desafio_voluntariado.entities.AtividadeDeInteresse;
@@ -36,20 +37,19 @@ public class AtividadeInteresseController {
         return ResponseEntity.ok(atividades);
     }
     
-    @PostMapping("/vincular/{usuarioId}/{atividadeId}")
+    @PostMapping("/vincular/{usuarioId}")
     public ResponseEntity<UsuarioDTO> vincularAtividade(
             @PathVariable Integer usuarioId, 
-            @PathVariable Integer atividadeId) {
-        UsuarioDTO usuario = atividadeDeInteresseService.vincularAtividadeAoUsuario(usuarioId, atividadeId);
+            @RequestParam List<AtividadeDeInteresse> atividadeDeInteresseList) {
+        UsuarioDTO usuario = atividadeDeInteresseService.vincularAtividadesAoUsuario(usuarioId, atividadeDeInteresseList);
         return ResponseEntity.ok(usuario);
     }
 
-    // Desvincular uma atividade de interesse de um usuário
-    @DeleteMapping("/desvincular/{usuarioId}/{atividadeId}")
+    @DeleteMapping("/desvincular/{usuarioId}")
     public ResponseEntity<UsuarioDTO> desvincularAtividade(
             @PathVariable Integer usuarioId, 
-            @PathVariable Integer atividadeId) {
-        UsuarioDTO usuario = atividadeDeInteresseService.desvincularAtividadeDoUsuario(usuarioId, atividadeId);
+            @RequestParam List<AtividadeDeInteresse> atividadeDeInteresseList) {
+        UsuarioDTO usuario = atividadeDeInteresseService.desvincularAtividadeDoUsuario(usuarioId, atividadeDeInteresseList);
         return ResponseEntity.ok(usuario);
     }
 
