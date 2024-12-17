@@ -47,26 +47,36 @@ public class AtividadeDeInteresseService {
     }
 
     @Transactional
-    public UsuarioDTO vincularAtividadeAoUsuario(Integer usuarioId, Integer atividadeId) {
+    public UsuarioDTO vincularAtividadesAoUsuario(Integer usuarioId, List<AtividadeDeInteresse> atividadesDeInteresse) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        AtividadeDeInteresse atividade = atividadeDeInteresseRepository.findById(atividadeId)
-                .orElseThrow(() -> new EntityNotFoundException("Atividade de interesse não encontrada"));
+        if (atividadesDeInteresse != null && !atividadesDeInteresse.isEmpty()) {
+            for (AtividadeDeInteresse atividade : atividadesDeInteresse) {
+                if (!usuario.getAtividadeDeInteresseList().contains(atividade)) {
+                    usuario.getAtividadeDeInteresseList().add(atividade);
+                }
+            }
+        }
 
-        usuario.getAtividadeDeInteresseList().add(atividade);
+        usuarioRepository.save(usuario);
+
         return usuarioService.getOne(usuario.getId());
     }
 
     @Transactional
-    public UsuarioDTO desvincularAtividadeDoUsuario(Integer usuarioId, Integer atividadeId) {
+    public UsuarioDTO desvincularAtividadeDoUsuario(Integer usuarioId, List<AtividadeDeInteresse> atividadesDeInteresse) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        AtividadeDeInteresse atividade = atividadeDeInteresseRepository.findById(atividadeId)
-                .orElseThrow(() -> new EntityNotFoundException("Atividade de interesse não encontrada"));
+        if (atividadesDeInteresse != null && !atividadesDeInteresse.isEmpty()) {
+            for (AtividadeDeInteresse atividade : atividadesDeInteresse) {
+                if (usuario.getAtividadeDeInteresseList().contains(atividade)) {
+                    usuario.getAtividadeDeInteresseList().remove(atividade);
+                }
+            }
+        }
 
-        usuario.getAtividadeDeInteresseList().remove(atividade);
         usuarioRepository.save(usuario);
 
         return usuarioService.getOne(usuario.getId());
