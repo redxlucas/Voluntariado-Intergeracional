@@ -1,9 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-// Importar os componentes
-import FormularioIdoso from './components/FormularioIdoso';
-import FormularioVoluntario from './components/FormularioVoluntario';
+import FormularioCadastro from './components/FormularioCadastro';
 import Login from './components/Login';
 import UsuarioFilter from './components/UsuarioFilter';
 import AtividadeInteresse from './components/AtividadeInteresse';
@@ -15,10 +13,7 @@ const App: React.FC = () => {
         <nav>
           <ul>
             <li>
-              <Link to="/idoso">Cadastro de Idoso</Link>
-            </li>
-            <li>
-              <Link to="/voluntario">Cadastro de Voluntário</Link>
+              <Link to="/cadastrar">Cadastro</Link>
             </li>
             <li>
               <Link to="/login">Login</Link>
@@ -33,8 +28,7 @@ const App: React.FC = () => {
         </nav>
 
         <Routes>
-          <Route path="/idoso" element={<FormularioIdoso />} />
-          <Route path="/voluntario" element={<FormularioVoluntario />} />
+          <Route path="/cadastrar" element={<FormularioCadastro />} />
           <Route path="/login" element={<Login />} />
           <Route path="/pages" element={<UsuarioFilter/>} />
           <Route path="/atividades" element={<AtividadeInteresse/>} />

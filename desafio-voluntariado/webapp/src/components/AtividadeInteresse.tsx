@@ -23,7 +23,7 @@ const AtividadeInteresse: React.FC = () => {
 
   return (
     <div>
-      <h1>Atividades de Interesse</h1>
+      <h1>Selecionar Atividades de Interesse</h1>
       <form>
         {atividades.length === 0 ? (
           <p>Carregando atividades...</p>
