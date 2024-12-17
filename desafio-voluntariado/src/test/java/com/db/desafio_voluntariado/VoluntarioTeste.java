@@ -22,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.db.desafio_voluntariado.entities.Usuario;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.entities.Voluntario;
 import com.db.desafio_voluntariado.exception.NotFoundException;
@@ -48,13 +47,13 @@ public class VoluntarioTeste {
 
     @Test
     void testAdicionarUsuario() {
-        voluntario = new Voluntario();
+
         voluntario.setId(1);
         voluntario.setNomeCompleto("João Silva");
 
         when(voluntarioRepository.save(voluntario)).thenReturn(voluntario);
 
-        Usuario savedUsuario = voluntarioService.adicionarVoluntario(voluntario);
+        UsuarioDTO savedUsuario = voluntarioService.adicionarVoluntario(voluntario);
 
         assertNotNull(savedUsuario);
         assertEquals(1, savedUsuario.getId());
@@ -64,7 +63,7 @@ public class VoluntarioTeste {
 
     @Test
     void testGetOne() {
-        voluntario = new Voluntario();
+        
         voluntario.setId(1);
         voluntario.setNomeCompleto("João Silva");
 
