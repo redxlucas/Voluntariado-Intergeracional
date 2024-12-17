@@ -6,6 +6,7 @@ import FormularioIdoso from './components/FormularioIdoso';
 import FormularioVoluntario from './components/FormularioVoluntario';
 import Login from './components/Login';
 import UsuarioFilter from './components/UsuarioFilter';
+import AtividadeInteresse from './components/AtividadeInteresse';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,9 @@ const App: React.FC = () => {
             <li>
               <Link to="/pages">Procurar</Link>
             </li>
+            <li>
+              <Link to="/atividades">Atividades de Interesse</Link>
+            </li>
           </ul>
         </nav>
 
@@ -33,6 +37,7 @@ const App: React.FC = () => {
           <Route path="/voluntario" element={<FormularioVoluntario />} />
           <Route path="/login" element={<Login />} />
           <Route path="/pages" element={<UsuarioFilter/>} />
+          <Route path="/atividades" element={<AtividadeInteresse/>} />
           <Route path="/" element={<div>Selecione um tipo de cadastro</div>} />
         </Routes>
       </div>

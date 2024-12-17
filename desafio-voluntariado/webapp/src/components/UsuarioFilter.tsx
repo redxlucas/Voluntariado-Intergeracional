@@ -25,7 +25,6 @@ const UsuarioFilter: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Handle changes in the activity checkboxes
   const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const activityId = parseInt(e.target.value, 10);
     if (e.target.checked) {
@@ -43,19 +42,17 @@ const UsuarioFilter: React.FC = () => {
     return tipo.charAt(0).toUpperCase() + tipo.slice(1).toLowerCase();
   };
 
-  // Busca os usuários filtrados pelas atividades selecionadas
   useEffect(() => {
     const fetchUsuarios = async () => {
       // Verifica se há atividades selecionadas
       if (selectedAtividadesDeInteresse.size === 0) {
-        setUsuarios([]); // Limpa os resultados quando não há atividades selecionadas
+        setUsuarios([]);
         return;
       }
 
       try {
         setIsLoading(true);
 
-        // Converte o Set de atividades selecionadas para uma string com os IDs separados por vírgula
         const params = {
           atividadeDeInteresseList: Array.from(selectedAtividadesDeInteresse).join(',')
         };
@@ -94,7 +91,6 @@ const UsuarioFilter: React.FC = () => {
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {/* Exibe os usuários encontrados */}
       {usuarios.length === 0 && !isLoading && !error && <p>Nenhum usuário encontrado.</p>}
 
       {usuarios.length > 0 && (
