@@ -24,7 +24,7 @@ public class IdosoController {
     private IdosoService idosoService;
 
     @PostMapping
-    public ResponseEntity<Idoso> adicionarIdoso(Idoso idoso) {
+    public ResponseEntity<UsuarioDTO> adicionarIdoso(Idoso idoso) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(idosoService.adicionarIdoso(idoso));
     }

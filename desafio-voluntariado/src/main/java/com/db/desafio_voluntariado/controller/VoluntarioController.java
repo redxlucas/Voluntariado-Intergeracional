@@ -24,7 +24,7 @@ public class VoluntarioController {
     private VoluntarioService voluntarioService;
 
     @PostMapping
-    public ResponseEntity<Voluntario> adicionarVoluntario(Voluntario voluntario) {
+    public ResponseEntity<UsuarioDTO> adicionarVoluntario(Voluntario voluntario) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(voluntarioService.adicionarVoluntario(voluntario));
     }

@@ -23,18 +23,21 @@ public class VoluntarioService {
     // private PontuacaoRepository pontosRepository;
 
     @Transactional
-    public Voluntario adicionarVoluntario(Voluntario voluntario){
-        return voluntarioRepository.save(voluntario);
+    public UsuarioDTO adicionarVoluntario(Voluntario voluntario) {
+        Voluntario novoVoluntario = voluntarioRepository.save(voluntario);
+        return new UsuarioDTO(novoVoluntario.getId(), novoVoluntario.getNomeCompleto(), novoVoluntario.getIdade(),
+                    novoVoluntario.getTelefone(), novoVoluntario.getEmail(), "VOLUNTARIO", novoVoluntario.getAtividadeDeInteresseList());
     }
 
-        public List<UsuarioDTO> getAll() {
+    public List<UsuarioDTO> getAll() {
         List<Voluntario> voluntarioList = (List<Voluntario>) voluntarioRepository.findAll();
         if (voluntarioList.isEmpty()) {
             throw new NotFoundException("Voluntario(s) não encontrado(s)");
         }
         return voluntarioList.stream().map(
                 voluntario -> new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(),
-                        voluntario.getTelefone(), voluntario.getEmail(), "VOLUNTARIO", voluntario.getAtividadeDeInteresseList()))
+                        voluntario.getTelefone(), voluntario.getEmail(), "VOLUNTARIO",
+                        voluntario.getAtividadeDeInteresseList()))
                 .collect(Collectors.toList());
     }
 
@@ -43,7 +46,8 @@ public class VoluntarioService {
 
         if (voluntarioOptional.isPresent()) {
             Voluntario voluntario = voluntarioOptional.get();
-            return new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(), voluntario.getTelefone(),
+            return new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(),
+                    voluntario.getTelefone(),
                     voluntario.getEmail(), "VOLUNTARIO", voluntario.getAtividadeDeInteresseList());
         } else {
             throw new NotFoundException("Voluntario não encontrado.");
@@ -52,12 +56,12 @@ public class VoluntarioService {
 
     // @Transactional
     // public Pontuacao adicionarPontos(Integer voluntarioId, int pontosGanhos) {
-    //     Voluntario voluntario = voluntarioRepository.findById(voluntarioId)
-    //         .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado"));
-        
-    //     voluntario.adicionarPontos(pontosGanhos);
-    //     voluntarioRepository.save(voluntario);
-        
-    //     return voluntario.getPontos();
+    // Voluntario voluntario = voluntarioRepository.findById(voluntarioId)
+    // .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado"));
+
+    // voluntario.adicionarPontos(pontosGanhos);
+    // voluntarioRepository.save(voluntario);
+
+    // return voluntario.getPontos();
     // }
 }

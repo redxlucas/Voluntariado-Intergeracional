@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.db.desafio_voluntariado.entities.AtividadeDeInteresse;
 import com.db.desafio_voluntariado.entities.Usuario;
+import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.exception.NotFoundException;
 import com.db.desafio_voluntariado.repository.AtividadeDeInteresseRepository;
 import com.db.desafio_voluntariado.repository.UsuarioRepository;
@@ -17,12 +18,15 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class AtividadeDeInteresseService {
-    
+
     @Autowired
     private AtividadeDeInteresseRepository atividadeDeInteresseRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Transactional
     public AtividadeDeInteresse add(AtividadeDeInteresse atividadeDeInteresse) {
@@ -30,46 +34,48 @@ public class AtividadeDeInteresseService {
     }
 
     public List<AtividadeDeInteresse> getAll() {
-        List<AtividadeDeInteresse> atividadeDeInteresseList = (List<AtividadeDeInteresse>) atividadeDeInteresseRepository.findAll();
-        if(atividadeDeInteresseList.isEmpty()){
+        List<AtividadeDeInteresse> atividadeDeInteresseList = (List<AtividadeDeInteresse>) atividadeDeInteresseRepository
+                .findAll();
+        if (atividadeDeInteresseList.isEmpty()) {
             throw new NotFoundException("Atividade(s) de Interesse não encontrada(s)");
         }
         return atividadeDeInteresseList;
     }
 
-    public Optional<AtividadeDeInteresse> buscarAtividadePorId(Integer id) {
+    public Optional<AtividadeDeInteresse> getOne(Integer id) {
         return atividadeDeInteresseRepository.findById(id);
     }
 
-    // Vincular uma atividade de interesse a um usuário
     @Transactional
-    public Usuario vincularAtividadeAoUsuario(Integer usuarioId, Integer atividadeId) {
+    public UsuarioDTO vincularAtividadeAoUsuario(Integer usuarioId, Integer atividadeId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-        
+
         AtividadeDeInteresse atividade = atividadeDeInteresseRepository.findById(atividadeId)
                 .orElseThrow(() -> new EntityNotFoundException("Atividade de interesse não encontrada"));
-        
+
         usuario.getAtividadeDeInteresseList().add(atividade);
-        return usuarioRepository.save(usuario);
+        return usuarioService.getOne(usuario.getId());
     }
 
     @Transactional
-    public Usuario desvincularAtividadeDoUsuario(Integer usuarioId, Integer atividadeId) {
+    public UsuarioDTO desvincularAtividadeDoUsuario(Integer usuarioId, Integer atividadeId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-        
+
         AtividadeDeInteresse atividade = atividadeDeInteresseRepository.findById(atividadeId)
                 .orElseThrow(() -> new EntityNotFoundException("Atividade de interesse não encontrada"));
-        
+
         usuario.getAtividadeDeInteresseList().remove(atividade);
-        return usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
+
+        return usuarioService.getOne(usuario.getId());
     }
 
-    public List<AtividadeDeInteresse> buscarAtividadesDoUsuario(Integer usuarioId) {
+    public List<AtividadeDeInteresse> getAtividadePorUsuário(Integer usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-        
+
         return usuario.getAtividadeDeInteresseList();
     }
 }

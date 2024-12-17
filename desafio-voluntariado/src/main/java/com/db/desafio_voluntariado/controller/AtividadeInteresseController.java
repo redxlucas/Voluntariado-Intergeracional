@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.db.desafio_voluntariado.entities.AtividadeDeInteresse;
-import com.db.desafio_voluntariado.entities.Usuario;
+import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.services.AtividadeDeInteresseService;
 
 @RestController
@@ -37,19 +37,19 @@ public class AtividadeInteresseController {
     }
     
     @PostMapping("/vincular/{usuarioId}/{atividadeId}")
-    public ResponseEntity<Usuario> vincularAtividade(
+    public ResponseEntity<UsuarioDTO> vincularAtividade(
             @PathVariable Integer usuarioId, 
             @PathVariable Integer atividadeId) {
-        Usuario usuario = atividadeDeInteresseService.vincularAtividadeAoUsuario(usuarioId, atividadeId);
+        UsuarioDTO usuario = atividadeDeInteresseService.vincularAtividadeAoUsuario(usuarioId, atividadeId);
         return ResponseEntity.ok(usuario);
     }
 
     // Desvincular uma atividade de interesse de um usuário
     @DeleteMapping("/desvincular/{usuarioId}/{atividadeId}")
-    public ResponseEntity<Usuario> desvincularAtividade(
+    public ResponseEntity<UsuarioDTO> desvincularAtividade(
             @PathVariable Integer usuarioId, 
             @PathVariable Integer atividadeId) {
-        Usuario usuario = atividadeDeInteresseService.desvincularAtividadeDoUsuario(usuarioId, atividadeId);
+        UsuarioDTO usuario = atividadeDeInteresseService.desvincularAtividadeDoUsuario(usuarioId, atividadeId);
         return ResponseEntity.ok(usuario);
     }
 
@@ -57,7 +57,7 @@ public class AtividadeInteresseController {
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<AtividadeDeInteresse>> buscarAtividadesDoUsuario(
             @PathVariable Integer usuarioId) {
-        List<AtividadeDeInteresse> atividades = atividadeDeInteresseService.buscarAtividadesDoUsuario(usuarioId);
+        List<AtividadeDeInteresse> atividades = atividadeDeInteresseService.getAtividadePorUsuário(usuarioId);
         return ResponseEntity.ok(atividades);
     }
 }
