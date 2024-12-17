@@ -9,7 +9,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.db.desafio_voluntariado.entities.AtividadeDeInteresse;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.services.UsuarioService;
 
