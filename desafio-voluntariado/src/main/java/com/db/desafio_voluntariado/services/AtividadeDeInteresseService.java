@@ -42,10 +42,6 @@ public class AtividadeDeInteresseService {
         return atividadeDeInteresseList;
     }
 
-    public Optional<AtividadeDeInteresse> getOne(Integer id) {
-        return atividadeDeInteresseRepository.findById(id);
-    }
-
     @Transactional
     public UsuarioDTO vincularAtividadesAoUsuario(String email, List<AtividadeDeInteresse> atividadesDeInteresse) {
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -87,5 +83,10 @@ public class AtividadeDeInteresseService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         return usuario.getAtividadeDeInteresseList();
+    }
+
+    public AtividadeDeInteresse getOne(Integer id) {
+        return atividadeDeInteresseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Atividade de Interesse não encontrada com ID: " + id));
     }
 }

@@ -83,12 +83,13 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
   }, [atividades, userTipo, userEmail]);
 
   const handleCreateActivity = (usuario: UsuarioDTO) => {
-    // Redirecionar para a página de criação de atividade passando os dados como estado
+    const atividadeIds = usuario.atividadeDeInteresse.map((atividade) => atividade.id);
+    
+    alert(atividadeIds)
     navigate('/atividade', {
       state: {
-        usuario,
-        atividadeIds: usuario.atividadeDeInteresse.map((atividade) => atividade.id)
-      }
+        atividadeIds,
+      },
     });
   };
 

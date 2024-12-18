@@ -53,7 +53,6 @@ public class AtividadeInteresseController {
         return ResponseEntity.ok(usuario);
     }
 
-    // Buscar atividades de interesse de um usuário
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<AtividadeDeInteresse>> buscarAtividadesDoUsuario(
             @PathVariable Integer usuarioId) {

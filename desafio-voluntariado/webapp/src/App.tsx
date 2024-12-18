@@ -63,9 +63,6 @@ const App: React.FC = () => {
                     <Link to="/atividades">Atividades de Interesse</Link>
                   </li>
                   <li>
-                    <Link to="/atividade">Criar Atividade</Link>
-                  </li>
-                  <li>
                     <button 
                       onClick={handleLogout} 
                       className="logout-btn"

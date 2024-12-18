@@ -1,11 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-interface AtividadeDTO {
-  id: number;
-  nome: string;
-}
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface Atividade {
   nome: string;
@@ -16,14 +10,9 @@ interface Atividade {
   atividadeDeInteresseId: number;
 }
 
-interface FormularioCadastroAtividadeProps {
-  atividades: AtividadeDTO[]; // Lista de atividades
-}
-
-function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
-  if (!atividades || atividades.length === 0) {
-    return <div>Erro: Nenhuma atividade disponível para seleção.</div>;
-  }
+function FormularioAtividade() {
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<Atividade>({
     nome: 'Nome Padrão',
@@ -31,13 +20,11 @@ function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
     status: 'Pendente',
     dataAtividade: '',
     local: '',
-    atividadeDeInteresseId: atividades.length > 0 ? atividades[0].id : 1,
+    atividadeDeInteresseId: 0,
   });
-
   const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
-  const navigate = useNavigate();
+  const { atividadeIds } = location.state || {}; // IDs passados pelo `navigate`
 
-  // Handle input changes and update the state
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -45,7 +32,6 @@ function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
       [name]: value,
     }));
 
-    // If the input field is filled, remove the error
     if (value.trim() !== '') {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -54,7 +40,6 @@ function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
     }
   };
 
-  // Validate form data
   const validateForm = () => {
     const newErrors: { [key: string]: boolean } = {};
     let isValid = true;
@@ -76,15 +61,12 @@ function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
     return isValid;
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate the form before submitting
     if (validateForm()) {
       try {
-        const response = await axios.post('http://localhost:8080/atividade', formData);
-        console.log('Resposta do servidor:', response?.data);
+        console.log('Form data:', formData);
         navigate('/atividades'); // Redireciona após cadastro
         alert('Atividade cadastrada com sucesso!');
       } catch (error) {
@@ -99,23 +81,32 @@ function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
       <form onSubmit={handleSubmit}>
         <h1>Cadastrar Atividade</h1>
 
-        <div>
-          <label htmlFor="atividadeDeInteresseId">*Atividade de Interesse</label>
-          <select
-            id="atividadeDeInteresseId"
-            name="atividadeDeInteresseId"
-            value={formData.atividadeDeInteresseId}
-            onChange={handleChange}
-            required
-            style={{ borderColor: errors.atividadeDeInteresseId ? 'red' : '', borderWidth: errors.atividadeDeInteresseId ? '2px' : '' }}
-          >
-            {atividades.map((atividade) => (
-              <option key={atividade.id} value={atividade.id}>
-                {atividade.nome}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Verifica se atividadeIds foi passado */}
+        {!atividadeIds || atividadeIds.length === 0 ? (
+          <div>Erro: Nenhuma atividade de interesse disponível.</div>
+        ) : (
+          <div>
+            <label htmlFor="atividadeDeInteresseId">*Atividade de Interesse</label>
+            <select
+              id="atividadeDeInteresseId"
+              name="atividadeDeInteresseId"
+              value={formData.atividadeDeInteresseId}
+              onChange={handleChange}
+              required
+              style={{
+                borderColor: errors.atividadeDeInteresseId ? 'red' : '',
+                borderWidth: errors.atividadeDeInteresseId ? '2px' : '',
+              }}
+            >
+              <option value="">Selecione uma atividade</option>
+              {atividadeIds.map((id: number) => (
+                <option key={id} value={id}>
+                  Atividade {id} {/* Mostra o ID da atividade como rótulo */}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div>
           <label htmlFor="descricao">*Descrição</label>
@@ -126,7 +117,10 @@ function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
             onChange={handleChange}
             required
             placeholder="Descrição da atividade"
-            style={{ borderColor: errors.descricao ? 'red' : '', borderWidth: errors.descricao ? '2px' : '' }}
+            style={{
+              borderColor: errors.descricao ? 'red' : '',
+              borderWidth: errors.descricao ? '2px' : '',
+            }}
           />
         </div>
 
@@ -164,9 +158,7 @@ function FormularioAtividade({ atividades }: FormularioCadastroAtividadeProps) {
         </div>
 
         <div>
-          <button type="submit">
-            Finalizar Cadastro
-          </button>
+          <button type="submit">Finalizar Cadastro</button>
         </div>
       </form>
     </div>
