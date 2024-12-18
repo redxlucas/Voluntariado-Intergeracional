@@ -17,7 +17,14 @@ body {
     width: 300px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 15px;
+  }
+
+  form > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
   form h1 {
@@ -31,7 +38,6 @@ body {
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 100%;
     font-size: 16px;
   }
   

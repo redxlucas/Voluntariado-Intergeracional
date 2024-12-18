@@ -116,7 +116,7 @@ function FormularioCadastro() {
 
       console.log('Resposta do servidor:', response?.data);
       
-      navigate('/atividades');
+      navigate('/login');
       
       setFormData({
         nomeCompleto: "",
@@ -142,7 +142,6 @@ function FormularioCadastro() {
   };
 
   const handleStepChange = () => {
-    // Validate current step and mark errors
     const stepErrors: {[key: string]: boolean} = {};
     let isValid = true;
 
@@ -208,10 +207,8 @@ function FormularioCadastro() {
         break;
     }
 
-    // Update errors
     setErrors(stepErrors);
 
-    // Move to next step if valid
     if (isValid) {
       if (currentStep < 4) {
         setCurrentStep(currentStep + 1);
@@ -228,7 +225,6 @@ function FormularioCadastro() {
       }));
     }
     setCurrentStep(step);
-    // Clear errors when going back
     setErrors({});
   };
 

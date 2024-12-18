@@ -47,8 +47,8 @@ public class AtividadeDeInteresseService {
     }
 
     @Transactional
-    public UsuarioDTO vincularAtividadesAoUsuario(Integer usuarioId, List<AtividadeDeInteresse> atividadesDeInteresse) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
+    public UsuarioDTO vincularAtividadesAoUsuario(String email, List<AtividadeDeInteresse> atividadesDeInteresse) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         if (atividadesDeInteresse != null && !atividadesDeInteresse.isEmpty()) {

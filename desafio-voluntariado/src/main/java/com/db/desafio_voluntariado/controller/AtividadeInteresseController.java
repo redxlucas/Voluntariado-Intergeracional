@@ -37,11 +37,11 @@ public class AtividadeInteresseController {
         return ResponseEntity.ok(atividades);
     }
     
-    @PostMapping("/vincular/{usuarioId}")
+    @PostMapping("/vincular")
     public ResponseEntity<UsuarioDTO> vincularAtividade(
-            @PathVariable Integer usuarioId, 
+            @RequestParam String email, 
             @RequestParam List<AtividadeDeInteresse> atividadeDeInteresseList) {
-        UsuarioDTO usuario = atividadeDeInteresseService.vincularAtividadesAoUsuario(usuarioId, atividadeDeInteresseList);
+        UsuarioDTO usuario = atividadeDeInteresseService.vincularAtividadesAoUsuario(email, atividadeDeInteresseList);
         return ResponseEntity.ok(usuario);
     }
 

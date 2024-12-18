@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.db.desafio_voluntariado.entities.Usuario;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.services.UsuarioService;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/usuario")
@@ -47,5 +49,12 @@ public class UsuarioController {
         Page<UsuarioDTO> usuarios = usuarioService.filtrarUsuarios(email, atividadeDeInteresseList, pageable);
         return ResponseEntity.ok(usuarios);
     }
+    
+    @PostMapping("/auth/login")
+    public ResponseEntity<Boolean> login(@RequestParam String email, @RequestParam String senha) {
+        Boolean login = usuarioService.login(email, senha);
+        return ResponseEntity.ok(login);
+    }
+
 }
 

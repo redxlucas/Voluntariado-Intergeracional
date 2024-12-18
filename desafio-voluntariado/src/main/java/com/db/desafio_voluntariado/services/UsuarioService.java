@@ -83,4 +83,17 @@ public class UsuarioService {
 
         return usuarioDTOPage;
     }
+
+    public Boolean login(String email, String senha) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+
+        if (usuarioOptional.isEmpty()) {
+            throw new NotFoundException("Email não encontrado.");
+        }
+
+        if (!senha.equals(usuarioOptional.get().getSenha())) {
+            return false;
+        }
+        return true;
+    }
 }
