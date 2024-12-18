@@ -42,9 +42,9 @@ public class AtividadeController {
     @PostMapping("/{atividadeId}/participantes")
     public ResponseEntity<AtividadeDTO> adicionarParticipante(
             @PathVariable Integer atividadeId,
-            Integer idosoId, 
-            Integer voluntarioId) {
-        AtividadeDTO atividadeAtualizada = atividadeService.adicionarParticipante(atividadeId, idosoId, voluntarioId);
+            Integer usuarioUmId, 
+            Integer usuarioDoisId) {
+        AtividadeDTO atividadeAtualizada = atividadeService.adicionarParticipante(atividadeId, usuarioUmId, usuarioDoisId);
         return ResponseEntity.ok(atividadeAtualizada);
     }
 }

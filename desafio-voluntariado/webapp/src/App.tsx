@@ -60,11 +60,14 @@ const App: React.FC = () => {
                     <Link to="/pesquisar">Pesquisar</Link>
                   </li>
                   <li>
-                    <Link to="/atividades">Atividades de Interesse</Link>
+                    <Link to="/atividades">Interesses</Link>
                   </li>
                   <li>
-                    <button 
-                      onClick={handleLogout} 
+                    <Link to="/lista-atividades">Suas Atividades</Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
                       className="logout-btn"
                     >
                       Sair
@@ -87,41 +90,34 @@ const App: React.FC = () => {
 
             {userEmail && (
               <>
-                <Route 
-                  path="/dashboard" 
+                <Route
+                  path="/dashboard"
                   element={
                     <ProtectedRoute>
                       <Dashboard onLogout={handleLogout} />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/pesquisar" 
+                <Route
+                  path="/pesquisar"
                   element={
                     <ProtectedRoute>
                       <UsuarioFilter />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/atividades" 
-                  element={
-                    <ProtectedRoute>
-                      <AtividadeInteresse />
-                    </ProtectedRoute>
-                  } 
-                />
+                <Route path="/atividades" element={ <ProtectedRoute><AtividadeInteresse /></ProtectedRoute>}/>
                 <Route path="/atividade" element={<ProtectedRoute><Atividade /></ProtectedRoute>} />
               </>
             )}
 
-            <Route 
-              path="/" 
-              element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
+            <Route
+              path="/"
+              element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
             />
-            <Route 
-              path="*" 
-              element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
+            <Route
+              path="*"
+              element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
             />
           </Routes>
         </main>

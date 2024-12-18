@@ -106,30 +106,54 @@ public class AtividadeService {
     }
 
     @Transactional
-    public AtividadeDTO adicionarParticipante(Integer atividadeId, Integer idosoId, Integer voluntarioId) {
+    public AtividadeDTO adicionarParticipante(Integer atividadeId, Integer usuarioUmId, Integer usuarioDoisId) {
         Optional<Atividade> atividadeOptional = atividadeRepository.findById(atividadeId);
         if (atividadeOptional.isEmpty()) {
-            throw new NotFoundException("Atividade não encontrado.");
+            throw new NotFoundException("Atividade não encontrada.");
         }
         Atividade atividade = atividadeOptional.get();
-
-        Idoso idoso = idosoRepository.findById(idosoId)
-                .orElseThrow(() -> new EntityNotFoundException("Idoso não encontrado com ID: " + idosoId));
-
-        Voluntario voluntario = voluntarioRepository.findById(voluntarioId)
-                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado com ID: " + voluntarioId));
-
-        atividade.adicionarParticipante(idoso, voluntario);
-
-        UsuarioDTO idosoDTO = new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getIdade(),
-                idoso.getTelefone(), idoso.getEmail(), "IDOSO", idoso.getAtividadeDeInteresseList());
-
-        UsuarioDTO voluntarioDTO = new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(),
-                voluntario.getIdade(), voluntario.getTelefone(), voluntario.getEmail(), "VOLUNTARIO",
-                voluntario.getAtividadeDeInteresseList());
-
-        return new AtividadeDTO(atividade.getId(), atividade.getNome(), atividade.getDescricao(), atividade.getStatus(),
-                atividade.getDataAtividade(), atividade.getLocal(), idosoDTO, voluntarioDTO,
-                atividade.getAtividadeDeInteresse());
+    
+        Optional<Idoso> idosoOptional = idosoRepository.findById(usuarioUmId);
+        Optional<Voluntario> voluntarioOptional = voluntarioRepository.findById(usuarioUmId);
+    
+        if (idosoOptional.isPresent()) {
+            Idoso idoso = idosoOptional.get();
+    
+            Voluntario voluntario = voluntarioRepository.findById(usuarioDoisId)
+                    .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado com ID: " + usuarioDoisId));
+    
+            atividade.adicionarParticipante(idoso, voluntario);
+    
+            UsuarioDTO idosoDTO = new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getIdade(),
+                    idoso.getTelefone(), idoso.getEmail(), "IDOSO", idoso.getAtividadeDeInteresseList());
+    
+            UsuarioDTO voluntarioDTO = new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(),
+                    voluntario.getIdade(), voluntario.getTelefone(), voluntario.getEmail(), "VOLUNTARIO",
+                    voluntario.getAtividadeDeInteresseList());
+    
+            return new AtividadeDTO(atividade.getId(), atividade.getNome(), atividade.getDescricao(), atividade.getStatus(),
+                    atividade.getDataAtividade(), atividade.getLocal(), idosoDTO, voluntarioDTO,
+                    atividade.getAtividadeDeInteresse());
+        } 
+        else if (voluntarioOptional.isPresent()) {
+            Voluntario voluntario = voluntarioOptional.get();
+    
+            Idoso idoso = idosoRepository.findById(usuarioDoisId)
+                    .orElseThrow(() -> new EntityNotFoundException("Idoso não encontrado com ID: " + usuarioDoisId));
+    
+            atividade.adicionarParticipante(idoso, voluntario);
+    
+            UsuarioDTO idosoDTO = new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getIdade(),
+                    idoso.getTelefone(), idoso.getEmail(), "IDOSO", idoso.getAtividadeDeInteresseList());
+    
+            UsuarioDTO voluntarioDTO = new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(),
+                    voluntario.getIdade(), voluntario.getTelefone(), voluntario.getEmail(), "VOLUNTARIO",
+                    voluntario.getAtividadeDeInteresseList());
+    
+            return new AtividadeDTO(atividade.getId(), atividade.getNome(), atividade.getDescricao(), atividade.getStatus(),
+                    atividade.getDataAtividade(), atividade.getLocal(), idosoDTO, voluntarioDTO,
+                    atividade.getAtividadeDeInteresse());
+        } 
+        throw new NotFoundException("Usuário não encontrado com ID: " + usuarioUmId);
     }
 }

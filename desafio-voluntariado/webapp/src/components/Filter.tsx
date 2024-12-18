@@ -56,7 +56,6 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
       try {
         setIsLoading(true);
 
-        // Pegando os ids das atividades
         const atividadeIds = atividades.map((atividade) => atividade.id);
         const params = {
           atividadeDeInteresseList: atividadeIds.join(','),
@@ -83,12 +82,13 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
   }, [atividades, userTipo, userEmail]);
 
   const handleCreateActivity = (usuario: UsuarioDTO) => {
-    const atividadeIds = usuario.atividadeDeInteresse.map((atividade) => atividade.id);
-    
-    alert(atividadeIds)
+    const usuarioId = usuario.id;
+  
+    alert(usuarioId);
+  
     navigate('/atividade', {
       state: {
-        atividadeIds,
+        usuarioId,
       },
     });
   };
@@ -124,9 +124,8 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
                 <p>Nenhuma atividade vinculada</p>
               )}
 
-              {/* Botão Criar Atividade */}
               <button onClick={() => handleCreateActivity(usuario)}>
-                Criar Atividade
+                Solicitar Atividade
               </button>
             </li>
           ))}
