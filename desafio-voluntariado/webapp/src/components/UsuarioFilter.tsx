@@ -1,81 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Filter from './Filter'; // Importando o Filter para usar a lógica de filtro
+import { useNavigate } from 'react-router-dom';
 
-// Tipo de dado para o DTO do usuário
-interface UsuarioDTO {
-  id: number;
-  nomeCompleto: string;
-  idade: number;
-  telefone: string;
-  email: string;
-  tipo_usuario: 'IDOSO' | 'VOLUNTARIO';
-  atividadeDeInteresse: AtividadeDTO[]; // Lista de atividades de interesse associadas
-}
-
-// Tipo de dado para a Atividade de Interesse
 interface AtividadeDTO {
   id: number;
   nome: string;
 }
 
 const UsuarioFilter: React.FC = () => {
-  const [usuarios, setUsuarios] = useState<UsuarioDTO[]>([]);
-  const [atividades, setAtividades] = useState<AtividadeDTO[]>([]);
-  const [selectedAtividadesDeInteresse, setSelectedAtividadesDeInteresse] = useState<Set<number>>(new Set()); // Para armazenar as atividades selecionadas
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [atividades, setAtividades] = useState<AtividadeDTO[]>([]); // Lista de atividades
+  const [selectedAtividadesDeInteresse, setSelectedAtividadesDeInteresse] = useState<AtividadeDTO[]>([]); // Lista de atividades selecionadas
   const [error, setError] = useState<string | null>(null);
-
-  const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const activityId = parseInt(e.target.value, 10);
-    if (e.target.checked) {
-      setSelectedAtividadesDeInteresse((prevSelected) => new Set(prevSelected.add(activityId)));
-    } else {
-      setSelectedAtividadesDeInteresse((prevSelected) => {
-        const newSelected = new Set(prevSelected);
-        newSelected.delete(activityId);
-        return newSelected;
-      });
-    }
-  };
-
-  const formatTipoUsuario = (tipo: string): string => {
-    return tipo.charAt(0).toUpperCase() + tipo.slice(1).toLowerCase();
-  };
-
-  useEffect(() => {
-    const fetchUsuarios = async () => {
-      // Verifica se há atividades selecionadas
-      if (selectedAtividadesDeInteresse.size === 0) {
-        setUsuarios([]);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-
-        const params = {
-          atividadeDeInteresseList: Array.from(selectedAtividadesDeInteresse).join(',')
-        };
-
-        const response = await axios.get(`http://localhost:8080/usuario/filtrar`, { params });
-
-        setUsuarios(response.data.content || []);
-      } catch (error) {
-        setError('Erro ao buscar usuários');
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUsuarios();
-  }, [selectedAtividadesDeInteresse]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAtividades = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/atividade-interesse`);
-        setAtividades(response.data || []);
+        setAtividades(response.data || []); // Setando atividades recebidas
       } catch (error) {
         setError('Erro ao buscar atividades');
         console.error(error);
@@ -85,38 +28,30 @@ const UsuarioFilter: React.FC = () => {
     fetchAtividades();
   }, []);
 
+  const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const activityId = parseInt(e.target.value, 10);
+    const activity = atividades.find((atividade) => atividade.id === activityId); // Encontra a atividade pelo ID
+
+    if (activity) {
+      if (e.target.checked) {
+        // Adiciona a atividade à lista de atividades selecionadas
+        setSelectedAtividadesDeInteresse((prevSelected) => [...prevSelected, activity]);
+      } else {
+        // Remove a atividade da lista de atividades selecionadas
+        setSelectedAtividadesDeInteresse((prevSelected) =>
+          prevSelected.filter((atividade) => atividade.id !== activityId)
+        );
+      }
+    }
+  };
+
+  // Função para navegar para o formulário de criação de atividade
+  const handleCreateActivity = () => {
+    navigate('/formulario-cadastro-atividade'); // Navega para o formulário
+  };
+
   return (
     <div>
-      <h2>Pesquisa de Usuários por Atividades</h2>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {usuarios.length === 0 && !isLoading && !error && <p>Nenhum usuário encontrado.</p>}
-
-      {usuarios.length > 0 && (
-        <ul>
-          {usuarios.map((usuario) => (
-            <li key={usuario.id}>
-              <h3>{usuario.nomeCompleto}</h3>
-              <p>Email: {usuario.email}</p>
-              <p>Idade: {usuario.idade}</p>
-              <p>Telefone: {usuario.telefone}</p>
-              <p>Tipo de Usuário: {formatTipoUsuario(usuario.tipo_usuario)}</p>
-              
-              <h4>Atividades de Interesse</h4>
-              {usuario.atividadeDeInteresse.length > 0 ? (
-                <ul>
-                  {usuario.atividadeDeInteresse.map((atividade) => (
-                    <li key={atividade.id}>{atividade.nome}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Nenhuma atividade vinculada</p>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
       <h3>Selecione as Atividades de Interesse</h3>
       {atividades.length > 0 ? (
         <form>
@@ -127,7 +62,7 @@ const UsuarioFilter: React.FC = () => {
                 id={`atividade-${atividade.id}`}
                 value={atividade.id}
                 onChange={handleActivityChange}
-                checked={selectedAtividadesDeInteresse.has(atividade.id)}
+                checked={selectedAtividadesDeInteresse.some((selected) => selected.id === atividade.id)}
               />
               <label htmlFor={`atividade-${atividade.id}`}>{atividade.nome}</label>
             </div>
@@ -136,6 +71,18 @@ const UsuarioFilter: React.FC = () => {
       ) : (
         <p>Carregando atividades...</p>
       )}
+
+      {/* Passando as atividades selecionadas como parâmetro para o componente Filter */}
+      <h2>Pesquisa de Voluntários por Atividades</h2>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <Filter atividades={selectedAtividadesDeInteresse} /> {/* Passando a lista de objetos */}
+
+      {/* Botão "Criar Atividade" */}
+      <div>
+        <button onClick={handleCreateActivity}>Criar Atividade</button>
+      </div>
     </div>
   );
 };

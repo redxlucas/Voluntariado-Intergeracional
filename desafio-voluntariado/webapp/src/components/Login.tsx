@@ -43,7 +43,6 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         alert('Credenciais inválidas');
       }
 
-      // Reset form
       setFormData({
         email: '',
         senha: '',

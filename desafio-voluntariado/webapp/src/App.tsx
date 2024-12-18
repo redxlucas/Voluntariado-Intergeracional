@@ -5,7 +5,9 @@ import Login from './components/Login';
 import AtividadeInteresse from './components/AtividadeInteresse';
 import Dashboard from './components/Dashboard';
 import UsuarioFilter from './components/UsuarioFilter';
+import Atividade from './components/FormularioAtividade';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import './styles/Header.css';
 
 const App: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string | null>(localStorage.getItem('userEmail'));
@@ -34,56 +36,98 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
+      <div className="app-container">
+        <header className="app-header">
+          <nav className="app-nav">
+            <ul>
+              {!userEmail && (
+                <>
+                  <li>
+                    <Link to="/cadastrar">Cadastro</Link>
+                  </li>
+                  <li>
+                    <Link to="/login">Login</Link>
+                  </li>
+                </>
+              )}
+
+              {userEmail && (
+                <>
+                  <li>
+                    <Link to="/dashboard">Inicio</Link>
+                  </li>
+                  <li>
+                    <Link to="/pesquisar">Pesquisar</Link>
+                  </li>
+                  <li>
+                    <Link to="/atividades">Atividades de Interesse</Link>
+                  </li>
+                  <li>
+                    <Link to="/atividade">Criar Atividade</Link>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={handleLogout} 
+                      className="logout-btn"
+                    >
+                      Sair
+                    </button>
+                  </li>
+                </>
+              )}
+            </ul>
+          </nav>
+        </header>
+
+        <main className="app-main">
+          <Routes>
             {!userEmail && (
               <>
-                <li>
-                  <Link to="/cadastrar">Cadastro</Link>
-                </li>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
+                <Route path="/cadastrar" element={<FormularioCadastro />} />
+                <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
               </>
             )}
 
             {userEmail && (
               <>
-                <li>
-                  <Link to="/dashboard">Dashboard</Link>
-                </li>
-                <li>
-                  <Link to="/pesquisar">Pesquisar</Link>
-                </li>
-                <li>
-                  <Link to="/atividades">Atividades de Interesse</Link>
-                </li>
+                <Route 
+                  path="/dashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard onLogout={handleLogout} />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/pesquisar" 
+                  element={
+                    <ProtectedRoute>
+                      <UsuarioFilter />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/atividades" 
+                  element={
+                    <ProtectedRoute>
+                      <AtividadeInteresse />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/atividade" element={<ProtectedRoute><Atividade /></ProtectedRoute>} />
               </>
             )}
-          </ul>
-        </nav>
 
-        <Routes>
-          {!userEmail && (
-            <>
-              <Route path="/cadastrar" element={<FormularioCadastro />} />
-              <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-              <Route path="/atividades" element={<AtividadeInteresse />} />
-            </>
-          )}
-
-          {userEmail && (
-            <>
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard onLogout={handleLogout} /></ProtectedRoute>} />
-              <Route path="/pesquisar" element={<ProtectedRoute><UsuarioFilter /></ProtectedRoute>} />
-              <Route path="/atividades" element={<ProtectedRoute><AtividadeInteresse /></ProtectedRoute>} />
-            </>
-          )}
-
-          <Route path="/" element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
-          <Route path="*" element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
-        </Routes>
+            <Route 
+              path="/" 
+              element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="*" 
+              element={userEmail ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
+            />
+          </Routes>
+        </main>
       </div>
     </Router>
   );

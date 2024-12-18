@@ -9,7 +9,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.db.desafio_voluntariado.entities.Usuario;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.services.UsuarioService;
 
@@ -28,11 +27,11 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> getOneUsuarioById(@PathVariable Integer id) {
-        UsuarioDTO usuarioDTO = usuarioService.getOne(id);
-        return ResponseEntity.ok(usuarioDTO);
-    }
+    // @GetMapping("/{id}")
+    // public ResponseEntity<UsuarioDTO> getOneUsuarioById(@PathVariable Integer id) {
+    //     UsuarioDTO usuarioDTO = usuarioService.getOne(id);
+    //     return ResponseEntity.ok(usuarioDTO);
+    // }
     
     @GetMapping("/todos")
     public ResponseEntity<List<UsuarioDTO>> getAllUsuarioById() {
@@ -56,5 +55,10 @@ public class UsuarioController {
         return ResponseEntity.ok(login);
     }
 
+    @GetMapping("/{email}")
+    public ResponseEntity<UsuarioDTO> getUsuarioByEmail(@PathVariable String email) {
+        UsuarioDTO usuarioDTO = usuarioService.getUsuarioByEmail(email);
+        return ResponseEntity.ok(usuarioDTO);
+    }
 }
 

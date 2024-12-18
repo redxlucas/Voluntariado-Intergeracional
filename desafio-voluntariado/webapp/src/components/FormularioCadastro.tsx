@@ -38,7 +38,6 @@ function FormularioCadastro() {
   const [errors, setErrors] = useState<{[key: string]: boolean}>({});
   const navigate = useNavigate();
 
-  // Effect to reset responsible person fields when user type changes
   useEffect(() => {
     if (userType === 'VOLUNTARIO') {
       setFormData(prevData => ({
@@ -56,7 +55,6 @@ function FormularioCadastro() {
       [name]: value,
     }));
     
-    // Remove error state for the input when it's filled
     if (value.trim() !== '') {
       setErrors(prevErrors => ({
         ...prevErrors,
@@ -231,7 +229,7 @@ function FormularioCadastro() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h1>Cadastrar no Unilaços</h1>
+        <h1>Cadastrar</h1>
         
         {currentStep === 1 && (
           <>

@@ -96,4 +96,17 @@ public class UsuarioService {
         }
         return true;
     }
+
+    public UsuarioDTO getUsuarioByEmail(String email) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            return new UsuarioDTO(usuario.getId(), usuario.getNomeCompleto(), usuario.getIdade(),
+                    usuario.getTelefone(), usuario.getEmail(), usuario instanceof Idoso ? "IDOSO" : "VOLUNTARIO",
+                    usuario.getAtividadeDeInteresseList());
+        } else {
+            throw new NotFoundException("Usuario não encontrado.");
+        }
+    }
 }
