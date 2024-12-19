@@ -23,7 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       try {
         setIsLoading(true);
         const response = await axios.get(`http://localhost:8080/usuario/${userEmail}`);
-        
+
         const atividades = response.data.atividadeDeInteresse.map((atividade: { id: number, nome: string }) => ({
           id: atividade.id,
           nome: atividade.nome,
@@ -44,7 +44,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   return (
     <div className="dashboard">
       <header>
-        <h1>Início</h1>
+        <h1>Inicio</h1>
         <p>Bem-vindo, {userEmail}</p>
       </header>
 

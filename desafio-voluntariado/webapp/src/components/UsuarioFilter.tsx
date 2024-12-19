@@ -48,8 +48,9 @@ const UsuarioFilter: React.FC = () => {
       <h3>Selecione as Atividades de Interesse</h3>
       {atividades.length > 0 ? (
         <form>
-          {atividades.map((atividade) => (
-            <div key={atividade.id}>
+            <div className="checkbox-grid">
+              {atividades.map((atividade) => (
+                <div key={atividade.id} className="checkbox-item">
               <input
                 type="checkbox"
                 id={`atividade-${atividade.id}`}
@@ -60,6 +61,7 @@ const UsuarioFilter: React.FC = () => {
               <label htmlFor={`atividade-${atividade.id}`}>{atividade.nome}</label>
             </div>
           ))}
+          </div>
         </form>
       ) : (
         <p>Carregando atividades...</p>

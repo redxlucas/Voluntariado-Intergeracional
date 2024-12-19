@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../styles/Login.css'
+import '../styles/Login.css';  // Importando o arquivo CSS com prefixo
 import { useNavigate, Link } from 'react-router-dom';
 
 interface LoginProps {
@@ -55,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="login-form">
         <h1>Logar no Unilaços</h1>
         <div>
           <input
@@ -66,6 +66,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             onChange={handleChange}
             required
             placeholder="E-mail"
+            className="login-input"
           />
         </div>
         <div>
@@ -76,11 +77,12 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             onChange={handleChange}
             placeholder="Senha"
             required
+            className="login-input"
           />
         </div>
-        <button type="submit">Entrar</button>
+        <button type="submit" className="login-button">Entrar</button>
         <div>
-          <p>Não tem uma conta? <Link to="/cadastrar">Cadastre-se aqui</Link></p>
+          <p>Não tem uma conta? <Link to="/cadastrar" className="login-link">Cadastre-se aqui</Link></p>
         </div>
       </form>
     </div>

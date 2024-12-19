@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 interface Usuario {
   nomeCompleto: string;
@@ -228,7 +228,7 @@ function FormularioCadastro() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='login-form'>
         <h1>Cadastrar</h1>
         
         {currentStep === 1 && (
@@ -237,6 +237,7 @@ function FormularioCadastro() {
               <label htmlFor="nomeCompleto">*Nome Completo</label>
               <input
                 type="text"
+                className='login-input'
                 id="nomeCompleto"
                 name="nomeCompleto"
                 value={formData.nomeCompleto}
@@ -255,6 +256,7 @@ function FormularioCadastro() {
               <input
                 type="date"
                 id="dataDeNascimento"
+                className='login-input'
                 name="dataDeNascimento"
                 value={formData.dataDeNascimento}
                 onChange={handleChange}
@@ -272,6 +274,7 @@ function FormularioCadastro() {
                   <input
                     type="radio"
                     name="tipoUsuario"
+                    className='login-input'
                     value="IDOSO"
                     checked={userType === "IDOSO"}
                     onChange={() => setUserType("IDOSO")}
@@ -285,6 +288,7 @@ function FormularioCadastro() {
                   <input
                     type="radio"
                     name="tipoUsuario"
+                    className='login-input'
                     value="VOLUNTARIO"
                     checked={userType === "VOLUNTARIO"}
                     onChange={() => setUserType("VOLUNTARIO")}
@@ -296,6 +300,7 @@ function FormularioCadastro() {
             <button 
               type="button" 
               onClick={handleStepChange}
+              className='login-button'
             >
               Continuar
             </button>
@@ -309,6 +314,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="cep"
+                className='login-input'
                 value={formData.cep}
                 onChange={handleCepChange}
                 required
@@ -323,6 +329,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="bairro"
+                className='login-input'
                 value={formData.bairro}
                 onChange={handleChange}
                 required
@@ -337,6 +344,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="cidade"
+                className='login-input'
                 value={formData.cidade}
                 onChange={handleChange}
                 required
@@ -351,6 +359,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="estado"
+                className='login-input'
                 value={formData.estado}
                 onChange={handleChange}
                 required
@@ -360,10 +369,10 @@ function FormularioCadastro() {
                 }}
               />
             </div>
-            <button type="button" onClick={() => handleStepBack(currentStep - 1)}>
+            <button type="button" onClick={() => handleStepBack(currentStep - 1)} className='login-button'>
               Voltar
             </button>
-            <button type="button" onClick={handleStepChange}>
+            <button type="button" onClick={handleStepChange} className='login-button'>
               Continuar
             </button>
           </>
@@ -376,6 +385,7 @@ function FormularioCadastro() {
               <input
                 type="email"
                 id="email"
+                className='login-input'
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -392,6 +402,7 @@ function FormularioCadastro() {
               <label htmlFor="senha">Senha:</label>
               <input
                 type="password"
+                className='login-input'
                 name="senha"
                 value={formData.senha}
                 onChange={handleChange}
@@ -409,6 +420,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="cpf"
+                className='login-input'
                 value={formData.cpf}
                 onChange={handleChange}
                 required
@@ -425,6 +437,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="telefone"
+                className='login-input'
                 value={formData.telefone}
                 onChange={handleChange}
                 required
@@ -436,16 +449,16 @@ function FormularioCadastro() {
               />
             </div>
 
-            <button type="button" onClick={() => handleStepBack(currentStep - 1)}>
+            <button type="button" onClick={() => handleStepBack(currentStep - 1)} className='login-button'>
               Voltar
             </button>
 
             {userType === 'VOLUNTARIO' ? (
-              <button type="submit">
+              <button type="submit" className='login-button'>
                 Finalizar Cadastro
               </button>
             ) : (
-              <button type="button" onClick={handleStepChange}>
+              <button type="button" onClick={handleStepChange} className='login-button'>
                 Continuar
               </button>
             )}
@@ -459,6 +472,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="nomeResponsavel"
+                className='login-input'
                 value={formData.nomeResponsavel || ''}
                 onChange={handleChange}
                 required
@@ -475,6 +489,7 @@ function FormularioCadastro() {
               <input
                 type="text"
                 name="telefoneResponsavel"
+                className='login-input'
                 value={formData.telefoneResponsavel || ''}
                 onChange={handleChange}
                 required
@@ -486,12 +501,13 @@ function FormularioCadastro() {
               />
             </div>
 
-            <button type="button" onClick={() => handleStepBack(currentStep - 1)}>
+            <button type="button" onClick={() => handleStepBack(currentStep - 1)} className='login-button'>
               Voltar
             </button>
             <button 
               type="submit" 
               onClick={handleStepChange}
+              className='login-button'
             >
               Finalizar Cadastro
             </button>

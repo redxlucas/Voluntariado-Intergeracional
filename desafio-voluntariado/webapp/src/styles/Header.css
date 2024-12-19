@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .app-container {
@@ -46,7 +47,7 @@ body {
     background-color: #60495A;
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     border-radius: 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s ease;

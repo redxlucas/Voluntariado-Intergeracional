@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/Modal.css'; // Importando os estilos para o Modal
+import '../styles/Modal.css';
 
 interface Atividade {
   id: number;

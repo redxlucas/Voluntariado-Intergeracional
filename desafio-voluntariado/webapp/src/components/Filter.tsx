@@ -18,7 +18,7 @@ interface UsuarioDTO {
 }
 
 interface UsuarioFilterProps {
-  atividades: AtividadeDTO[]; // A lista completa de atividades com id e nome
+  atividades: AtividadeDTO[];
 }
 
 const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {

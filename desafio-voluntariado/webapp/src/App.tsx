@@ -61,7 +61,7 @@ const App: React.FC = () => {
                     <Link to="/pesquisar">Pesquisar</Link>
                   </li>
                   <li>
-                    <Link to="/atividades">Interesses</Link>
+                    <Link to="/atividades">Adicionar Interesses</Link>
                   </li>
                   <li>
                     <Link to="/listaAtividades">Suas Atividades</Link>
