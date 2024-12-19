@@ -84,8 +84,6 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
   const handleCreateActivity = (usuario: UsuarioDTO) => {
     const usuarioId = usuario.id;
   
-    alert(usuarioId);
-  
     navigate('/atividade', {
       state: {
         usuarioId,

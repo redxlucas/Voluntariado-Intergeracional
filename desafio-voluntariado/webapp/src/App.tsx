@@ -5,7 +5,8 @@ import Login from './components/Login';
 import AtividadeInteresse from './components/AtividadeInteresse';
 import Dashboard from './components/Dashboard';
 import UsuarioFilter from './components/UsuarioFilter';
-import Atividade from './components/FormularioAtividade';
+import ListaAtividades from './components/ListaAtividades'
+import FormularioAtividade from './components/FormularioAtividade';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import './styles/Header.css';
 
@@ -63,7 +64,7 @@ const App: React.FC = () => {
                     <Link to="/atividades">Interesses</Link>
                   </li>
                   <li>
-                    <Link to="/lista-atividades">Suas Atividades</Link>
+                    <Link to="/listaAtividades">Suas Atividades</Link>
                   </li>
                   <li>
                     <button
@@ -106,8 +107,9 @@ const App: React.FC = () => {
                     </ProtectedRoute>
                   }
                 />
+                <Route path="/atividade" element={<ProtectedRoute><FormularioAtividade /></ProtectedRoute>} />
                 <Route path="/atividades" element={ <ProtectedRoute><AtividadeInteresse /></ProtectedRoute>}/>
-                <Route path="/atividade" element={<ProtectedRoute><Atividade /></ProtectedRoute>} />
+                <Route path="/listaAtividades" element={<ProtectedRoute><ListaAtividades /></ProtectedRoute>} />
               </>
             )}
 

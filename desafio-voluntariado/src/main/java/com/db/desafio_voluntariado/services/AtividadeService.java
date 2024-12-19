@@ -156,4 +156,47 @@ public class AtividadeService {
         } 
         throw new NotFoundException("Usuário não encontrado com ID: " + usuarioUmId);
     }
+
+    public List<AtividadeDTO> getByUsuarioId(Integer usuarioId) {
+        List<Atividade> atividadeList = atividadeRepository.findByUsuarioId(usuarioId);
+    
+        if (atividadeList.isEmpty()) {
+            throw new NotFoundException("Atividade(s) não encontrada(s) para o usuário com ID: " + usuarioId);
+        }
+    
+        return atividadeList.stream().map(atividade -> {
+            UsuarioDTO idosoDTO = null;
+            UsuarioDTO voluntarioDTO = null;
+    
+            if (!atividade.getParticipantes().isEmpty()) {
+                AtividadeParticipante participante = atividade.getParticipantes().get(0);
+    
+                Idoso idoso = participante.getIdoso();
+                Voluntario voluntario = participante.getVoluntario();
+    
+                idosoDTO = new UsuarioDTO(idoso.getId(), idoso.getNomeCompleto(), idoso.getIdade(),
+                        idoso.getTelefone(), idoso.getEmail(), "IDOSO", idoso.getAtividadeDeInteresseList());
+    
+                voluntarioDTO = new UsuarioDTO(voluntario.getId(), voluntario.getNomeCompleto(), voluntario.getIdade(),
+                        voluntario.getTelefone(), voluntario.getEmail(), "VOLUNTARIO", voluntario.getAtividadeDeInteresseList());
+            }
+    
+            return new AtividadeDTO(atividade.getId(), atividade.getNome(), atividade.getDescricao(),
+                    atividade.getStatus(), atividade.getDataAtividade(), atividade.getLocal(), idosoDTO, voluntarioDTO,
+                    atividade.getAtividadeDeInteresse());
+        }).collect(Collectors.toList());
+    }
+
+    public void marcarComoConcluida(Integer id) {
+        Optional<Atividade> atividadeOptional = atividadeRepository.findById(id);
+        if (atividadeOptional.isEmpty()) {
+            throw new NotFoundException("Atividade não encontrada.");
+        }
+        Atividade atividade = atividadeOptional.get();
+        
+            if (atividade.getId() != null && !atividade.getStatus().equals("Concluída")) {
+                atividade.setStatus("Concluída");
+                atividadeRepository.save(atividade);
+            }
+    }
 }

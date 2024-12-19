@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ import com.db.desafio_voluntariado.entities.AtividadeDTO;
 import com.db.desafio_voluntariado.services.AtividadeService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/atividade")
 public class AtividadeController {
     @Autowired
@@ -30,8 +31,14 @@ public class AtividadeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AtividadeDTO> getVoluntarioById(@PathVariable Integer id) {
+    public ResponseEntity<AtividadeDTO> getAtividadeById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(atividadeService.getOne(id));
+    }
+
+    @GetMapping("/todos/{usuarioId}")
+    public ResponseEntity<List<AtividadeDTO>> getAtividadesPorUsuarioId(@PathVariable Integer usuarioId) {
+        List<AtividadeDTO> atividades = atividadeService.getByUsuarioId(usuarioId);
+        return ResponseEntity.ok(atividades);
     }
 
     @GetMapping("/todos")
@@ -46,5 +53,11 @@ public class AtividadeController {
             Integer usuarioDoisId) {
         AtividadeDTO atividadeAtualizada = atividadeService.adicionarParticipante(atividadeId, usuarioUmId, usuarioDoisId);
         return ResponseEntity.ok(atividadeAtualizada);
+    }
+    
+    @PutMapping("/concluir/{id}")
+        public ResponseEntity<Boolean> concluirAtividades(@PathVariable Integer id) {
+            atividadeService.marcarComoConcluida(id);
+            return ResponseEntity.ok(true);
     }
 }

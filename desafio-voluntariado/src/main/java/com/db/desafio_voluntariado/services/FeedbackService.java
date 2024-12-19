@@ -66,4 +66,9 @@ public class FeedbackService {
                 feedback.getNota(), usuarioDTO, atividadeDTO);
     }
 
+    @Transactional
+    public List<Feedback> getFeedbacksByAtividadeId(Integer atividadeId) {
+        return feedbackRepository.findByAtividadeId(atividadeId);
+    }
+
 }

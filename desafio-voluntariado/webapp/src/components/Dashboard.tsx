@@ -23,8 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       try {
         setIsLoading(true);
         const response = await axios.get(`http://localhost:8080/usuario/${userEmail}`);
-
-        // Agora buscamos as atividades completas (id e nome)
+        
         const atividades = response.data.atividadeDeInteresse.map((atividade: { id: number, nome: string }) => ({
           id: atividade.id,
           nome: atividade.nome,

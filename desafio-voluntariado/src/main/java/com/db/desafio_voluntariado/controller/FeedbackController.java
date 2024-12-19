@@ -39,4 +39,9 @@ public class FeedbackController {
     public List<Feedback> getAllFeedbacks() {
         return feedbackService.getAll();
     }
+
+    @GetMapping("/atividade/{atividadeId}")
+    public List<Feedback> getFeedbacksByAtividade(@PathVariable Integer atividadeId) {
+        return feedbackService.getFeedbacksByAtividadeId(atividadeId);
+    }
 }
