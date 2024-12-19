@@ -3,14 +3,15 @@ package com.db.desafio_voluntariado;
 import com.db.desafio_voluntariado.controller.VoluntarioController;
 import com.db.desafio_voluntariado.entities.UsuarioDTO;
 import com.db.desafio_voluntariado.entities.Voluntario;
+import com.db.desafio_voluntariado.repository.VoluntarioRepository;
 import com.db.desafio_voluntariado.services.VoluntarioService;
-
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -21,9 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
+
 import java.util.Arrays;
 import java.util.List;
-
 
 @WebMvcTest(VoluntarioController.class)
 public class VoluntarioControllerTeste {
@@ -33,6 +35,7 @@ public class VoluntarioControllerTeste {
 
     @MockBean
     private VoluntarioService voluntarioService; 
+    
   
 
     private Voluntario voluntario;
@@ -53,7 +56,7 @@ public class VoluntarioControllerTeste {
     }
 
     @Test
-    public void testAdicionarVoluntario() throws Exception {
+    void testAdicionarVoluntario() throws Exception {
         
         when(voluntarioService.adicionarVoluntario(any(Voluntario.class))).thenReturn(usuarioDTO);
 
@@ -107,7 +110,8 @@ public class VoluntarioControllerTeste {
                 .andExpect(jsonPath("$[0].nomeCompleto").value("Erika Fane"))
                 .andExpect(jsonPath("$[1].id").value(3))
                 .andExpect(jsonPath("$[1].nomeCompleto").value("Emory Scott"));
-    }
+    }  
+
 
 
 }
