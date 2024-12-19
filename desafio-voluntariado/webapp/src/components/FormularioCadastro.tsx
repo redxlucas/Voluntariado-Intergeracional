@@ -80,7 +80,6 @@ function FormularioCadastro() {
             cidade: response.data.localidade,
             estado: response.data.uf,
           }));
-          // Clear any CEP-related errors
           setErrors(prevErrors => ({
             ...prevErrors,
             cep: false,

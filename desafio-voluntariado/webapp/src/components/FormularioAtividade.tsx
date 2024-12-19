@@ -30,7 +30,7 @@ function FormularioAtividade() {
   });
   const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
   const [atividadesInteresse, setAtividadesInteresse] = useState<AtividadeDeInteresse[]>([]);
-  const { usuarioId } = location.state || {}; // Recebe o ID do usuário passado na navegação
+  const { usuarioId } = location.state || {};
 
   useEffect(() => {
     if (usuarioId) {
@@ -131,7 +131,7 @@ function FormularioAtividade() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='login-form'>
         <h1>Cadastrar Atividade</h1>
         <div>
           <label htmlFor="descricao">Descrição</label>
@@ -139,6 +139,7 @@ function FormularioAtividade() {
             id="descricao"
             name="descricao"
             value={formData.descricao}
+            className="login-input"
             onChange={handleChange}
             placeholder="Descrição da atividade"
             style={{
@@ -153,6 +154,7 @@ function FormularioAtividade() {
           <input
             type="datetime-local"
             id="dataAtividade"
+            className="login-input"
             name="dataAtividade"
             value={formData.dataAtividade}
             onChange={handleChange}
@@ -169,6 +171,7 @@ function FormularioAtividade() {
           <input
             type="text"
             id="local"
+            className="login-input"
             name="local"
             value={formData.local}
             onChange={handleChange}
@@ -188,6 +191,7 @@ function FormularioAtividade() {
             <label htmlFor="atividadeDeInteresseId">*Atividade de Interesse</label>
             <select
               id="atividadeDeInteresseId"
+              className="login-input"
               name="atividadeDeInteresseId"
               value={formData.atividadeDeInteresseId}
               onChange={handleChange}
@@ -197,7 +201,7 @@ function FormularioAtividade() {
                 borderWidth: errors.atividadeDeInteresseId ? '2px' : '',
               }}
             >
-              <option value="">Selecione uma atividade</option>
+              <option value="" className="login-input">Selecione uma atividade</option>
               {atividadesInteresse.map((atividade) => (
                 <option key={atividade.id} value={atividade.id}>
                   {atividade.nome}

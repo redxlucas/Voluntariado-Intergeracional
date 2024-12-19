@@ -60,4 +60,10 @@ public class AtividadeController {
             atividadeService.marcarComoConcluida(id);
             return ResponseEntity.ok(true);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AtividadeDTO> editarAtividade(@PathVariable Integer id, Atividade atividade) {
+        AtividadeDTO atividadeAtualizada = atividadeService.editarAtividade(id, atividade);
+        return ResponseEntity.ok(atividadeAtualizada);
+    }
 }

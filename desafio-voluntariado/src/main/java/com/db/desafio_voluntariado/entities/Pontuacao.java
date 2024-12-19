@@ -24,6 +24,4 @@ public class Pontuacao {
 
     private Integer pontuacaoTotal;
     private LocalDateTime ultimaAtualizacao;
-
-    // Getters e setters
 }

@@ -1,8 +1,7 @@
-/* Estilização do formulário e layout */
 .checkbox-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colunas de igual tamanho */
-    gap: 10px; /* Espaço entre os itens */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
     margin-bottom: 20px;
   }
   
@@ -12,7 +11,7 @@
   }
   
   .checkbox-item input {
-    margin-right: 10px; /* Espaço entre o checkbox e o label */
+    margin-right: 10px;
   }
   
   h1 {

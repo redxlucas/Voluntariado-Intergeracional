@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Filter from './Filter';
 
-interface DashboardProps {
-  onLogout: () => void;
-}
-
-const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
-  const [atividades, setAtividades] = useState<{ id: number, nome: string }[]>([]); // Agora é um array de atividades com id e nome
+const Dashboard: React.FC = () => {
+  const [atividades, setAtividades] = useState<{ id: number, nome: string }[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 

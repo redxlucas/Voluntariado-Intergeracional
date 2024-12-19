@@ -26,12 +26,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
-    // @GetMapping("/{id}")
-    // public ResponseEntity<UsuarioDTO> getOneUsuarioById(@PathVariable Integer id) {
-    //     UsuarioDTO usuarioDTO = usuarioService.getOne(id);
-    //     return ResponseEntity.ok(usuarioDTO);
-    // }
     
     @GetMapping("/todos")
     public ResponseEntity<List<UsuarioDTO>> getAllUsuarioById() {
@@ -43,7 +37,7 @@ public class UsuarioController {
     public ResponseEntity<Page<UsuarioDTO>> filtrarUsuarios(
         @RequestParam(required = false) String email,
         @RequestParam(required = false) List<Integer> atividadeDeInteresseList,
-        @PageableDefault(size = 10, page = 0) Pageable pageable
+        @PageableDefault(size = 50, page = 0) Pageable pageable
     ) {
         Page<UsuarioDTO> usuarios = usuarioService.filtrarUsuarios(email, atividadeDeInteresseList, pageable);
         return ResponseEntity.ok(usuarios);

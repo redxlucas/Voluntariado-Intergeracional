@@ -39,15 +39,15 @@ const ListaAtividades = () => {
   const [atividades, setAtividades] = useState<Atividade[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [detalhesAtividade, setDetalhesAtividade] = useState<Atividade | null>(null);
-  const [comentarios, setComentarios] = useState<Comentario[]>([]); // Estado para armazenar os comentários
-  const [step, setStep] = useState<number>(1); // Controle de etapas
+  const [comentarios, setComentarios] = useState<Comentario[]>([]);
+  const [step, setStep] = useState<number>(1);
   const [comentario, setComentario] = useState<string>('');
   const [nota, setNota] = useState<number>(0);
   const [isConcluida, setIsConcluida] = useState<boolean>(false);
-  const [usuarioId, setUsuarioId] = useState<number | null>(null); // Estado para armazenar o ID do usuário
-  const [email, setEmail] = useState<string>(''); // Estado para armazenar o email do usuário
+  const [usuarioId, setUsuarioId] = useState<number | null>(null);
+  const [email, setEmail] = useState<string>('');
+  const [editandoAtividade, setEditandoAtividade] = useState<boolean>(false);
 
-  // Buscar o usuário com base no email armazenado no localStorage
   const fetchUsuario = async (email: string) => {
     try {
       const response = await axios.get(`http://localhost:8080/usuario/${email}`);
@@ -106,7 +106,7 @@ const ListaAtividades = () => {
             prevDetalhes ? { ...prevDetalhes, status: 'Concluída' } : null
           );
           setIsConcluida(true);
-          setStep(2); // Passa para a etapa 2 (comentário e nota)
+          setStep(2);
         } catch (err) {
           alert('Erro ao concluir a atividade.');
         }
@@ -119,24 +119,54 @@ const ListaAtividades = () => {
     if (atividade) {
       setDetalhesAtividade(atividade);
       setIsConcluida(atividade.status === 'Concluída');
-      setStep(1); // Começa no passo 1
-      fetchComentarios(id); // Busca os comentários ao exibir os detalhes da atividade
+      setStep(1);
+      setEditandoAtividade(false);
+      fetchComentarios(id);
     }
   };
 
   const closeModal = () => {
-    setStep(1); // Volta para o passo 1
     setDetalhesAtividade(null);
+    setStep(1);
     setIsConcluida(false);
-    setComentarios([]); // Limpa os comentários
-    setComentario(''); // Limpa o comentário
-    setNota(0); // Limpa a nota
+    setComentarios([]);
+    setComentario('');
+    setNota(0);
+    setEditandoAtividade(false);
+  };
+
+  const handleVoltar = () => {
+    if (editandoAtividade) {
+      setEditandoAtividade(false);
+    } else if (step === 2) {
+      setStep(1);
+    }
+  };
+
+  const handleEditarAtividade = () => {
+    setEditandoAtividade(true);
+  };
+
+  const handleSalvarEdicao = async () => {
+    if (detalhesAtividade) {
+      try {
+        await axios.put(`http://localhost:8080/atividade/${detalhesAtividade.id}`, detalhesAtividade);
+        setAtividades((prevAtividades) =>
+          prevAtividades.map((atividade) =>
+            atividade.id === detalhesAtividade.id ? detalhesAtividade : atividade
+          )
+        );
+        alert('Atividade atualizada com sucesso!');
+        setEditandoAtividade(false);
+      } catch (err) {
+        alert('Erro ao salvar as alterações.');
+      }
+    }
   };
 
   const handleComentarioSubmit = async () => {
     if (comentario && nota > 0) {
       try {
-        // Requisição POST para enviar comentário e nota
         await axios.post(`http://localhost:8080/feedback`, null, {
           params: {
             comentario,
@@ -146,28 +176,20 @@ const ListaAtividades = () => {
           },
         });
 
-        // Criação do novo comentário para garantir que ele tenha o tipo correto
         const novoComentario: Comentario = {
-          id: 0, // O id será gerado pelo backend, mas você pode inicializar com 0 ou outro valor caso necessário
+          id: 0,
           comentario,
           nota,
           usuario: {
             id: usuarioId!,
-            nomeCompleto: 'Seu nome', // Altere conforme necessário
+            nomeCompleto: 'Seu nome',
           },
         };
 
-        // Atualiza os comentários no estado local
         setComentarios((prevComentarios) => [...prevComentarios, novoComentario]);
-
-        // Exibe um alerta de sucesso
         alert('Comentário e nota enviados com sucesso!');
-
-        // Limpa os campos de comentário e nota após o envio
         setComentario('');
         setNota(0);
-
-        // Fecha o modal
         closeModal();
       } catch (err) {
         alert('Erro ao salvar comentário e nota.');
@@ -184,7 +206,6 @@ const ListaAtividades = () => {
   return (
     <div>
       <h1>Atividades Vinculadas</h1>
-
       <p>Email: {email}</p>
 
       {atividades.length === 0 ? (
@@ -193,7 +214,7 @@ const ListaAtividades = () => {
         <div>
           {atividades.map((atividade) => (
             <div key={atividade.id}>
-              <a href="#" onClick={() => showDetalhes(atividade.id)}>
+              <a href="#" onClick={() => showDetalhes(atividade.id)} className="atividade-link">
                 {atividade.nome}
               </a>
             </div>
@@ -201,33 +222,33 @@ const ListaAtividades = () => {
         </div>
       )}
 
-      {/* Modal com os detalhes da atividade */}
       {detalhesAtividade && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Detalhes da Atividade</h2>
-            {step === 1 && (
-              <div>
+
+            {!editandoAtividade && step === 1 && (
+              <>
                 <p>Nome: {detalhesAtividade.nome}</p>
                 <p>Descrição: {detalhesAtividade.descricao}</p>
                 <p>Status: {detalhesAtividade.status}</p>
                 <p>Data: {detalhesAtividade.dataAtividade}</p>
                 <p>Local: {detalhesAtividade.local}</p>
 
-                {/* Exibe os feedbacks se houver */}
                 {comentarios.length > 0 && (
                   <div>
                     <h4>Comentários:</h4>
                     {comentarios.map((comentario) => (
                       <div key={comentario.id}>
-                        <p><strong>{comentario.usuario.nomeCompleto}</strong> - Nota: {comentario.nota}</p>
+                        <p>
+                          <strong>{comentario.usuario.nomeCompleto}</strong> - Nota: {comentario.nota}
+                        </p>
                         <p>{comentario.comentario}</p>
                       </div>
                     ))}
                   </div>
                 )}
 
-                {/* Exibe o botão "Concluir Atividade" apenas se a atividade não foi concluída */}
                 {!isConcluida && (
                   <button
                     onClick={handleConcluirAtividade}
@@ -236,21 +257,74 @@ const ListaAtividades = () => {
                     Concluir Atividade
                   </button>
                 )}
-              </div>
+
+                <button onClick={handleEditarAtividade}>Editar Atividade</button>
+
+                {isConcluida && (
+                  <button onClick={() => setStep(2)}>Comentar</button>
+                )}
+
+                <button onClick={closeModal}>Fechar</button>
+              </>
+            )}
+
+            {editandoAtividade && (
+              <>
+                <h3>Editar Atividade</h3>
+                <div>
+                  <label>Descrição:</label>
+                  <textarea
+                    value={detalhesAtividade.descricao}
+                    className="login-input"
+                    onChange={(e) =>
+                      setDetalhesAtividade({ ...detalhesAtividade, descricao: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>Data:</label>
+                  <input
+                    type="date"
+                    value={detalhesAtividade.dataAtividade}
+                    className="login-input"
+                    onChange={(e) =>
+                      setDetalhesAtividade({ ...detalhesAtividade, dataAtividade: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>Local:</label>
+                  <input
+                    type="text"
+                    value={detalhesAtividade.local}
+                    className="login-input"
+                    onChange={(e) =>
+                      setDetalhesAtividade({ ...detalhesAtividade, local: e.target.value })
+                    }
+                  />
+                </div>
+                <button onClick={handleSalvarEdicao}>Salvar Alterações</button>
+                <button onClick={handleVoltar}>Voltar</button>
+              </>
             )}
 
             {step === 2 && (
-              <div>
+              <>
                 <h3>Comentário e Nota</h3>
-                <textarea
-                  placeholder="Digite seu comentário aqui..."
-                  value={comentario}
-                  onChange={(e) => setComentario(e.target.value)}
-                />
+                <div>
+                  <label>Comentário:</label>
+                  <textarea
+                    placeholder="Digite seu comentário aqui..."
+                    value={comentario}
+                    className="login-input"
+                    onChange={(e) => setComentario(e.target.value)}
+                  />
+                </div>
                 <div>
                   <label>Nota: </label>
                   <input
                     type="number"
+                    className="login-input"
                     value={nota}
                     onChange={(e) => setNota(Number(e.target.value))}
                     min="1"
@@ -258,19 +332,8 @@ const ListaAtividades = () => {
                   />
                 </div>
                 <button onClick={handleComentarioSubmit}>Salvar Comentário e Nota</button>
-              </div>
-            )}
-
-            {/* Exibe o botão comentar mesmo que a atividade esteja concluída */}
-            {isConcluida && step !== 2 && (
-              <button onClick={() => setStep(2)}>Comentar</button>
-            )}
-
-            {/* Botões para fechar ou voltar */}
-            {step === 2 ? (
-              <button onClick={() => setStep(1)}>Voltar</button>
-            ) : (
-              <button onClick={closeModal}>Fechar</button>
+                <button onClick={handleVoltar}>Voltar</button>
+              </>
             )}
           </div>
         </div>

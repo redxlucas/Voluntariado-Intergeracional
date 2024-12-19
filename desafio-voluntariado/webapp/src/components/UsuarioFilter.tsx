@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Filter from './Filter'; // Importando o Filter para usar a lógica de filtro
-import { useNavigate } from 'react-router-dom';
+import Filter from './Filter';
 
 interface AtividadeDTO {
   id: number;
@@ -9,10 +8,9 @@ interface AtividadeDTO {
 }
 
 const UsuarioFilter: React.FC = () => {
-  const [atividades, setAtividades] = useState<AtividadeDTO[]>([]); // Lista de atividades
-  const [selectedAtividadesDeInteresse, setSelectedAtividadesDeInteresse] = useState<AtividadeDTO[]>([]); // Lista de atividades selecionadas
+  const [atividades, setAtividades] = useState<AtividadeDTO[]>([]);
+  const [selectedAtividadesDeInteresse, setSelectedAtividadesDeInteresse] = useState<AtividadeDTO[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAtividades = async () => {

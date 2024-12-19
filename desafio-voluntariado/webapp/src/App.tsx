@@ -95,7 +95,7 @@ const App: React.FC = () => {
                   path="/dashboard"
                   element={
                     <ProtectedRoute>
-                      <Dashboard onLogout={handleLogout} />
+                      <Dashboard />
                     </ProtectedRoute>
                   }
                 />

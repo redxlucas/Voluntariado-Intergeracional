@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../styles/Login.css';  // Importando o arquivo CSS com prefixo
+import '../styles/Login.css';
 import { useNavigate, Link } from 'react-router-dom';
 
 interface LoginProps {

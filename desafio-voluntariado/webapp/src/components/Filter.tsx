@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Card.css'
 
 interface AtividadeDTO {
   id: number;
@@ -83,7 +84,7 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
 
   const handleCreateActivity = (usuario: UsuarioDTO) => {
     const usuarioId = usuario.id;
-  
+
     navigate('/atividade', {
       state: {
         usuarioId,
@@ -102,9 +103,9 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
       {usuarios.length === 0 && !isLoading && !error && <p>Nenhum usuário encontrado.</p>}
 
       {usuarios.length > 0 && (
-        <ul>
+        <div className="grid-container">
           {usuarios.map((usuario) => (
-            <li key={usuario.id}>
+            <div key={usuario.id} className="user-card">
               <h3>{usuario.nomeCompleto}</h3>
               <p>Email: {usuario.email}</p>
               <p>Idade: {usuario.idade}</p>
@@ -125,9 +126,9 @@ const Filter: React.FC<UsuarioFilterProps> = ({ atividades }) => {
               <button onClick={() => handleCreateActivity(usuario)}>
                 Solicitar Atividade
               </button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
